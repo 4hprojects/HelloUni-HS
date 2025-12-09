@@ -59,6 +59,9 @@ const adminActivitiesRoutes = require('./routes/admin_dashboard/activities');// 
 const evaluationRoutes = require('./routes/evaluation/evaluationRoutes'); // added 25 Nove 2025
 const activityJsonApi = require('./routes/activityJsonApi'); // added 27 Nov 2025
 const activitySubmit = require('./routes/activitySubmit'); // added 27 Nov 2025
+const javaLeaderboardApi = require('./routes/admin_dashboard/javaLeaderboardApi'); // added 27 Dec 2025
+const dsalgoFinalExamAPI = require('./routes/dsalgo1/dsalgofinalExamAPI');
+app.use('/api/activity/dsalgo1-finals', dsalgoFinalExamAPI);
 
 app.use('/api/activity', activitySubmit); // added 27 Nov 2025
 app.use('/api/activity', activityJsonApi); // added 27 Nov 2025
@@ -95,7 +98,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: mongoUri }),
+    store: MongoStore.create({ mongoUrl: process.env.MONGODB_URI }),
     cookie: {
         secure: false, // update to true for production Set to true only if using HTTPS
         httpOnly: true,
@@ -126,28 +129,43 @@ app.use('/api/attendance', attendanceApi);
 app.use('/api', reportsApi);
 app.use('/api', paymentReportsApi);
 app.use('/api/attendance-summary', attendanceSummaryApi);
-
+app.use('/api/admin_dashboard', javaLeaderboardApi); // added 27 Dec 2025
 
 app.use('/api/events', require('./routes/eventsApi'));
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/api/evaluation', evaluationRoutes(client)); // added 25 Nov 2025
 
 // Call the database connection function
+// Replace the entire second connectToDatabase() block with this:
+//udpated 7 Dec 2025
+// Update the connectToDatabase() call block (lines 82-106):
+
 connectToDatabase()
   .then(() => {
-    console.log("DB connected, now attach routes.");
+    console.log("DB connected and collections initialized, now attach all routes.");
 
-    // Attach admin routes
+    // Get database reference
+    const database = client.db('myDatabase');
+
     const adminUsersRoutes = require('./routes/adminUsersRoutes');
-    const classJoinRoute = require('./routes/classes/classJoinRoute'); //added 25 Nov 2025
-        app.use('/api', classJoinRoute(classesCollection, isAuthenticated)); //added 25 Nov 2025
+    const classJoinRoute = require('./routes/classes/classJoinRoute');
+
+    
+    // Mount routes that need collections
+
+    app.use('/api', classJoinRoute(classesCollection, isAuthenticated));
     app.use('/api/admin/users', adminUsersRoutes(usersCollection, isAuthenticated, isAdmin));
+    
+    // Also mount lessonQuizRoutes which was defined earlier but needs client
+    const lessonQuizRoutes = require('./routes/lessonQuizRoutes');
+    app.use('/api/lesson-quiz', lessonQuizRoutes(client));
 
     // Start the server
     const PORT = process.env.PORT || 3000;
     app.listen(PORT, () => {
       console.log(`Server is listening on port ${PORT}`);
     });
+    
   })
   .catch(err => {
     console.error("Failed to connect to DB:", err);
@@ -157,8 +175,8 @@ connectToDatabase()
 
 // Place all route definitions here
 
-    const lessonQuizRoutes = require('./routes/lessonQuizRoutes');
-    app.use('/api/lesson-quiz', lessonQuizRoutes(client));
+ //   const lessonQuizRoutes = require('./routes/lessonQuizRoutes');
+   // app.use('/api/lesson-quiz', lessonQuizRoutes(client));
 
 app.get('/api/config', (req, res) => {
     res.json({
@@ -181,8 +199,6 @@ const serviceAccount = {
     client_x509_cert_url: process.env.GOOGLE_CLIENT_X509_CERT_URL,
     universe_domain: process.env.GOOGLE_UNIVERSE_DOMAIN
 };
-
-
 
 // Import the new route file
 const studentEthnicityRoutes = require('./routes/studentEthnicityRoutes');
@@ -456,6 +472,8 @@ const loginLimiter = rateLimit({
     }
 });
 
+// Replace the current connectToDatabase() function (lines 247-255) with this:
+
 // Connect to MongoDB and initialize the usersCollection
 async function connectToDatabase() {
     try {
@@ -478,7 +496,43 @@ async function connectToDatabase() {
         classesCollection = database.collection('tblClasses');
         countersCollection = database.collection('tblCounters');
         classQuizCollection = database.collection('tblClassQuizzes');
+        app.locals.db = database; //added 27 Nov 2025
+        
+        // Initialize SendGrid with API key
+        sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+        
+        console.log('All collections initialized successfully');
+        console.log('SendGrid API key configured');
 
+    } catch (err) {
+        console.error('Failed to connect to MongoDB', err);
+        process.exit(1); // Exit the process if unable to connect
+    }
+}
+// Connect to MongoDB and initialize the usersCollection
+/*
+async function connectToDatabase() {
+    try {
+        // Initialize MongoDB connection monitoring
+        client.on('topologyClosed', () => console.error('MongoDB connection closed.'));
+        client.on('reconnect', () => console.log('MongoDB reconnected.'));
+
+        await client.connect();
+        console.log('Connected to MongoDB');
+        const database = client.db('myDatabase');
+
+        // Initialize collections
+        usersCollection = database.collection('tblUser');
+        gradesCollection = database.collection('tblGrades');
+        logsCollection = database.collection('tblLogs');
+        commentsCollection = database.collection('tblComments'); 
+        blogCollection = database.collection('tblBlogs');
+        quizzesCollection = database.collection('tblQuizzes');
+        attemptsCollection = database.collection('tblAttempts');       
+        classesCollection = database.collection('tblClasses');
+        countersCollection = database.collection('tblCounters');
+        classQuizCollection = database.collection('tblClassQuizzes');
+        app.locals.db = database; //added 27 Nov 2025
         // Initialize SendGrid with API key
         sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -487,7 +541,7 @@ async function connectToDatabase() {
         process.exit(1); // Exit the process if unable to connect
     }
 }
-
+*/
 /**
  * POST /api/quizzes/assign
  * Body example:
@@ -1568,7 +1622,7 @@ app.post('/api/classes/join', isAuthenticated, async (req, res) => {
     console.error('Error joining class:', err);
     return res.status(500).json({ success: false, message: 'Internal server error.' });
     }
-    });
+  });
   
 */
 app.put('/api/quizzes/:quizId/active', isAuthenticated, isAdmin, async (req, res) => {
@@ -1689,18 +1743,23 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
             if (
                 studentIDNumber !== "crfvadmin" &&
                 studentIDNumber !== "crfvuser" &&
-                !/^\d{7}$/.test(studentIDNumber)
+                !/^\d{7,8}$/.test(studentIDNumber)
             ) {
                 return res.status(400).json({ success: false, message: 'Student ID must be exactly 7 digits or a valid admin/user username.' });
             }
 
             const user = await usersCollection.findOne(
                 { studentIDNumber: studentIDNumber },
-                { projection: { firstName: 1, lastName: 1, studentIDNumber: 1, password: 1, role: 1, invalidLoginAttempts: 1, accountLockedUntil: 1, emaildb: 1 } }
+                { projection: { firstName: 1, lastName: 1, studentIDNumber: 1, password: 1, role: 1, invalidLoginAttempts: 1, accountLockedUntil: 1, emaildb: 1, emailConfirmed: 1 } }
             );
 
+            // Block login if email not confirmed
+            if (user && user.role === 'student' && user.emailConfirmed === false) {
+                return res.status(403).json({ success: false, message: 'Please verify your email before logging in.' });
+            }
+
             // Debug user password
-            console.log('User password from DB:', user.password);
+          //  console.log('User password from DB:', user.password);
             if (typeof user.password !== 'string') {
                 console.error('Password in DB is not a string');
                 return res.status(500).json({ success: false, message: 'Internal server error.' });
@@ -1721,9 +1780,9 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
             if (
                 studentIDNumber !== "crfvadmin" &&
                 studentIDNumber !== "crfvuser" &&
-                !/^\d{7}$/.test(studentIDNumber)
+                !/^\d{7,8}$/.test(studentIDNumber)
             ) {
-                return res.status(400).json({ success: false, message: 'Student ID must be exactly 7 digits or a valid admin/user username.' });
+                return res.status(400).json({ success: false, message: 'Student ID must be 7 or 8 digits or a valid admin/user username.' });
             }
             
 
@@ -1840,6 +1899,7 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
         try {
           const user = await usersCollection.findOne({ emaildb: email });
           if (!user) {
+           
             return res.status(404).json({
               success: false,
               message: 'If that email address is in our database, we will send you an email to reset your password.'
@@ -2608,7 +2668,9 @@ app.get('/*', (req, res, next) => {
         res.sendFile(filePath);
     });
 });
-
+app.get('/activity/dsalgo1/', (req, res) => {
+    res.sendFile(path.join(__dirname, +'/public/activity/dsalgo1/index.html'));
+});
 app.get('/activity', (req, res) => {
     res.sendFile(__dirname + '/public/activity/quiz_index.html');
 });
