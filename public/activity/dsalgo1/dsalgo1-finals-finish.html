@@ -2,118 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DSALGO1 Finals – Submission Complete</title>
+    <title>DSALGO1 Finals - Submission Complete</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            line-height: 1.6;
-            max-width: 650px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem;
-            text-align: center;
-        }
-        h1 {
-            margin-bottom: 0.5rem;
-        }
-        p {
-            margin-top: 0.75rem;
-        }
-        .box {
-            background: #f7f7f7;
-            padding: 1.5rem;
-            border-radius: 8px;
-            margin-top: 1.5rem;
-        }
-        .highlight {
-            font-weight: 600;
-        }
-        a.button-link {
-            display: inline-block;
-            padding: 0.7rem 1.4rem;
-            background: #0066cc;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            margin-top: 1.5rem;
-        }
-        a.button-link:hover {
-            opacity: 0.9;
-        }
-        .results-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 1rem;
-        }
-        .results-table th, .results-table td {
-            border: 1px solid #ddd;
-            padding: 0.8rem;
-            text-align: center;
-        }
-        .results-table th {
-            background: #f2f2f2;
-        }
-    </style>
+    <link rel="stylesheet" href="css/finish.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-
 <body>
-    <h1>Submission Received</h1>
-    <p>Thank you for completing your <strong>DSALGO1 Finals Examination</strong>.</p>
+    <div class="container">
+        <!-- Success Header -->
+        <div class="success-header">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1>Submission Received</h1>
+            <p class="subtitle">Thank you for completing your <strong>DSALGO1 Finals Examination</strong>.</p>
+        </div>
 
-    <div class="box">
-        <h2>Your Results</h2>
-        <table class="results-table">
-            <tr>
-                <th>Part</th>
-                <th>Score</th>
-                <th>Max</th>
-            </tr>
-            <tr>
-                <td>Part 1: Multiple Choice</td>
-                <td id="score-part1">...</td>
-                <td>30</td>
-            </tr>
-            <tr>
-                <td>Part 2: Matching Type</td>
-                <td id="score-part2">...</td>
-                <td>10</td>
-            </tr>
-            <tr>
-                <td>Part 3: High-Level Tasks</td>
-                <td id="score-part3">...</td>
-                <td>25</td>
-            </tr>
-            <tr>
-                <td>Part 4: Adjacency Matrix</td>
-                <td id="score-part4">...</td>
-                <td id="score-part4-max">50</td>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <th id="score-total">...</th>
-                <th>115</th>
-            </tr>
-        </table>
-        <p style="font-size:0.95em;color:#555;">
-            <em>Note: Part 4 is automatically scaled to a maximum of 50 points. If your score exceeds 50, the extra points are counted as bonus.</em>
-        </p>
-        <p class="highlight">Do not refresh or return to previous pages after this point.</p>
+        <!-- Student Info Card -->
+        <div class="info-card">
+            <h2><i class="fas fa-user-graduate"></i> Student Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Student ID:</span>
+                    <span id="studentIDNumberDisplay" class="info-value">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Name:</span>
+                    <span id="studentNameDisplay" class="info-value">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Section:</span>
+                    <span id="sectionDisplay" class="info-value">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Submission Time:</span>
+                    <span id="submissionTimeDisplay" class="info-value">[loading...]</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results-card">
+            <div class="results-header">
+                <h2><i class="fas fa-chart-bar"></i> Your Results</h2>
+                <div class="total-score-badge">
+                    <span class="total-label">TOTAL</span>
+                    <span id="score-total" class="total-value">...</span>
+                    <span class="total-max">/ 115</span>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Part</th>
+                            <th>Description</th>
+                            <th>Your Score</th>
+                            <th>Max Score</th>
+                            <th>Performance</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="part-number">Part 1</td>
+                            <td>Multiple Choice Questions</td>
+                            <td id="score-part1" class="score-value">...</td>
+                            <td class="max-score">30</td>
+                            <td id="performance-part1" class="performance-indicator">-</td>
+                        </tr>
+                        <tr>
+                            <td class="part-number">Part 2</td>
+                            <td>Matching Type</td>
+                            <td id="score-part2" class="score-value">...</td>
+                            <td class="max-score">10</td>
+                            <td id="performance-part2" class="performance-indicator">-</td>
+                        </tr>
+                        <tr>
+                            <td class="part-number">Part 3</td>
+                            <td>High-Level Tasks</td>
+                            <td id="score-part3" class="score-value">...</td>
+                            <td class="max-score">25</td>
+                            <td id="performance-part3" class="performance-indicator">-</td>
+                        </tr>
+                        <tr class="part4-row">
+                            <td class="part-number">Part 4</td>
+                            <td>Adjacency Matrix
+                                <span class="part4-note">(Scaled to 50 points)</span>
+                            </td>
+                            <td id="score-part4" class="score-value">...</td>
+                            <td class="max-score">50</td>
+                            <td id="performance-part4" class="performance-indicator">-</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="part4-details" id="part4-details">
+                <!-- Part 4 details will be populated by JavaScript -->
+            </div>
+
+            <div class="bonus-note" id="bonus-note" style="display: none;">
+                <i class="fas fa-star"></i>
+                <span>Bonus points earned! Your score exceeds the maximum.</span>
+            </div>
+
+            <div class="warning-message">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Do not refresh or return to previous pages after this point.</p>
+            </div>
+        </div>
+
+        <!-- Actions Section -->
+        <div class="actions-section">
+            <a class="button-primary" href="/activity/dsalgo1">
+                <i class="fas fa-home"></i> Return to Homepage
+            </a>
+            
+            <button class="button-secondary" id="printResultsBtn">
+                <i class="fas fa-print"></i> Print Results
+            </button>
+            
+            <a class="button-outline" href="#" id="downloadResultsBtn">
+                <i class="fas fa-download"></i> Save as PDF
+            </a>
+        </div>
+
+        <!-- Completion Message -->
+        <div class="completion-message">
+            <i class="fas fa-shield-check"></i>
+            <p>Your submission has been securely recorded. You may now safely close this page or return to the homepage.</p>
+        </div>
+
+        <!-- Progress Animation -->
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="loading-spinner"></div>
+            <p>Loading your results...</p>
+        </div>
     </div>
 
-    <div style="margin-bottom:1.2rem;">
-        <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span><br>
-        <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
-        <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
-    </div>
-
-    <a class="button-link" href="/activity/dsalgo1">Return to Homepage</a>
-
-    <p style="color:#22863a;font-weight:500;">
-      Your submission has been received. You may now safely close this page or return to the homepage.
-    </p>
-
-    <script src="/activity/dsalgo1/js/finish.js"></script>
+    <script src="js/finish.js"></script>
 </body>
 </html>
