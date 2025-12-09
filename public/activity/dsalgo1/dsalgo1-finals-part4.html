@@ -2,238 +2,278 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DSALGO1 Finals – Part 4 (Adjacency Matrix)</title>
+    <title>DSALGO1 Finals – Part 4 (Graph Representations)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+    
+    <!-- External CSS -->
+    <link rel="stylesheet" href="/activity/dsalgo1/css/part4.css">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tab monitoring script -->
+    <script src="/activity/dsalgo1/js/tabMonitor.js"></script>
+    
     <style>
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            line-height: 1.5;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-        h1, h2, h3 {
-            margin-top: 1rem;
-            margin-bottom: 0.5rem;
-        }
-        .meta {
-            background: #f5f5f5;
-            padding: 0.75rem;
-            margin-bottom: 1rem;
-        }
-        .meta div {
-            margin-bottom: 0.5rem;
-        }
-        fieldset {
-            border: 1px solid #ccc;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-        }
-        legend {
-            font-weight: 600;
-        }
-        label {
-            display: block;
-            margin-top: 0.5rem;
-            font-weight: 500;
-        }
-        textarea {
-            width: 100%;
-            min-height: 80px;
-            padding: 0.5rem;
-            margin-top: 0.25rem;
-            resize: vertical;
-        }
-        input[type="text"] {
-            padding: 0.4rem;
-            margin-top: 0.25rem;
-        }
-        code {
-            background: #f3f3f3;
-            padding: 0.1rem 0.25rem;
-        }
-        #message {
-            margin: 0.75rem 0;
-            color: red;
-        }
-        button {
-            padding: 0.6rem 1.2rem;
-            border: none;
-            cursor: pointer;
-            background: #0066cc;
-            color: #fff;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        button:disabled {
-            opacity: 0.6;
-            cursor: default;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 1rem;
-        }
-        a.button-link {
+        /* Additional inline styles */
+        .loading-spinner {
             display: inline-block;
-            padding: 0.55rem 1.1rem;
-            background: #777;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 0.95rem;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
         }
-        .hint {
-            font-size: 0.9rem;
-            color: #555;
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
-        pre {
-            background: #f8f9fa;
-            padding: 0.75rem;
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-        .edges-list {
-            display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            margin-top: 0.5rem;
-        }
-        .edges-list-row {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .edges-list-row span {
-            width: 70px;
-            font-size: 0.9rem;
-        }
-        .edges-list-row input[type="text"] {
-            flex: 1;
-        }
-        .matrix-wrapper {
-            margin-top: 1rem;
-            overflow-x: auto;
-        }
-        table.matrix-table {
-            border-collapse: collapse;
-            margin-top: 0.5rem;
-        }
-        .matrix-table th,
-        .matrix-table td {
-            border: 1px solid #ccc;
-            padding: 0.25rem;
-            text-align: center;
-            min-width: 40px;
-        }
-        .matrix-table th {
-            background: #f0f0f0;
+        
+        .time-remaining {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             font-weight: 600;
+            z-index: 1000;
+            border-left: 4px solid #7c3aed;
         }
-        .matrix-table input[type="text"] {
-            width: 32px;
-            text-align: center;
-            padding: 0.2rem;
-            margin: 0;
-        }
-        .save-status {
-            margin-left: 1rem;
-            color: #22863a;
-            font-weight: 500;
+        
+        @media print {
+            .time-remaining, .navigation {
+                display: none !important;
+            }
         }
     </style>
-
-    <script src="/activity/dsalgo1/js/tabMonitor.js"></script>
-    <script src="/activity/dsalgo1/js/part4.js"></script>
 </head>
 <body>
-<main>
-    <h1>DSALGO1 Finals – Part 4 (Adjacency Matrix)</h1>
-    <p>
-        This part focuses on graph representations. You will move from an adjacency list,
-        to the edge list, then to an adjacency matrix.
-    </p>
-
-    <section class="meta">
-        <h2>Student Identification</h2>
-        <div>
-            <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span>
+    <div class="container">
+        <!-- Time Remaining Display -->
+        <div class="time-remaining" id="timeRemaining">
+            <i class="fas fa-clock"></i> Time: <span id="timerDisplay">--:--</span>
         </div>
-        <div>
-            <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
-            <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
-        </div>
-    </section>
-
-    <form id="part4Form">
-        <input type="hidden" id="examID" name="examID" value="dsalgo1-finals">
-
-        <div id="message"></div>
-
-        <fieldset>
-            <legend>Part 4: From Edge List to Adjacency Matrix</legend>
-
-
-            <p class="hint">
-                Treat the graph as undirected. If an edge appears in one direction,
-                you assume the connection works both ways.
+        
+        <!-- Header -->
+        <header class="header">
+            <h1><i class="fas fa-network-wired"></i> DSALGO1 Finals – Part 4</h1>
+            <p class="subtitle">
+                This part focuses on graph representations. You will move from an adjacency list,
+                to the edge list, then to an adjacency matrix.
             </p>
+        </header>
 
-            <!-- Q1: List unique edges with add/delete -->
-            <label>
-                1. List all <strong>unique edges</strong> of the graph in ascending order.
-                Use the format <code>X–Y</code> with vertices in ascending order inside the pair (for example, <code>A–B</code>, not <code>B–A</code>).
-            </label>
-            <div id="edgesListContainer" class="edges-list" style="margin-bottom:1rem;">
-                <!-- Edge rows will be dynamically added here -->
+        <!-- Student Information Panel -->
+        <section class="info-panel">
+            <h2><i class="fas fa-user-graduate"></i> Student Information</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">Student ID Number</span>
+                    <span class="info-value" id="studentIDNumberDisplay">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Name</span>
+                    <span class="info-value" id="studentNameDisplay">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Section</span>
+                    <span class="info-value" id="sectionDisplay">[loading...]</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Exam ID</span>
+                    <span class="info-value">dsalgo1-finals</span>
+                </div>
             </div>
-            <button type="button" id="addEdgeBtn" style="margin-bottom:1rem;">Add Edge</button>
+        </section>
 
-            <!-- Q2: Drawing check - REPLACED WITH DYNAMIC GRAPH BUILDER UI -->
-            <label>
-                2. On your answer sheet, draw the graph based on the edges you listed.<br>
-                Below, enter the number of vertices, label each vertex, and use the interactive builder to connect vertices.
-            </label>
-            <div style="margin-bottom:1rem;">
-                <label for="vertexCountInput">Number of vertices:</label>
-                <input type="number" id="vertexCountInput" min="2" max="10" value="0" style="width:60px;">
+        <!-- Main Form -->
+        <form id="part4Form">
+            <input type="hidden" id="examID" name="examID" value="dsalgo1-finals">
+
+            <!-- Status Messages -->
+            <div id="message" class="message"></div>
+
+            <!-- Two-column layout for adjacency list and edge list -->
+            <div class="adj-edge-row">
+                <!-- Left: Adjacency List -->
+                <section class="adjacency-container">
+                    <div class="adjacency-title">
+                        <h3><i class="fas fa-list"></i> Generated Adjacency List</h3>
+                        <span class="hint">Treat the graph as undirected</span>
+                    </div>
+                    <div class="adjacency-list" id="adjacencyListDisplay">
+                        <p style="color: #666; text-align: center;">Loading adjacency list...</p>
+                    </div>
+                </section>
+                <!-- Right: Unique Edges -->
+                <div class="edge-list-panel">
+                    <h3>1. List all unique edges</h3>
+                    <p class="edge-format-hint">
+                        <strong>Format:</strong> Use <code>X-Y</code> with vertices in ascending order inside the pair 
+                        (e.g., <code>A-B</code>, not <code>B-A</code>).
+                    </p>
+                    <div class="edge-list-controls">
+                        <button type="button" id="addEdgeBtn" class="btn btn-success">
+                            <i class="fas fa-plus"></i> Add Edge
+                        </button>
+                        <span class="hint">Click to add more edges</span>
+                    </div>
+                    <div id="edgeListContainer" class="edge-list">
+                        <!-- Edge rows will be dynamically added here -->
+                    </div>
+                </div>
             </div>
-            <div id="vertexLabelsContainer" style="margin-bottom:1rem;"></div>
-            <div id="graphCanvasContainer" style="margin-bottom:1rem;">
-                <svg id="graphCanvas" width="480" height="300" style="border:1px solid #ccc;"></svg>
-            </div>
-            <div id="edgeListContainer" style="margin-bottom:1rem;"></div>
 
-            <!-- Q3: Adjacency matrix -->
-            <label>
-                3. Build the <strong>adjacency matrix</strong> for this graph.<br>
-                Enter the number of rows/columns (vertices), label each vertex, and fill in the matrix. Use <code>1</code> if there is an edge, <code>0</code> if there is none.<br>
-                <span class="hint">Remember: the graph is undirected, so the matrix should be symmetric across the diagonal.</span>
-            </label>
-            <div style="margin-bottom:1rem;">
-                <label for="matrixSizeInput">Number of vertices (rows/columns):</label>
-                <input type="number" id="matrixSizeInput" min="2" max="10" value="5" style="width:60px;">
-            </div>
-            <div id="matrixVertexLabelsContainer" style="margin-bottom:1rem;"></div>
-            <div class="matrix-wrapper" id="dynamicMatrixWrapper"></div>
+            <!-- Part 4 Section -->
+            <section class="section" id="section-part4">
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-icon">4</span>
+                        <h2><i class="fas fa-sitemap"></i> Part 4: From Edge List to Adjacency Matrix</h2>
+                    </div>
+                    <span class="section-progress">0/0 (0%)</span>
+                </div>
+                
+                <div class="section-description">
+                    <p>Analyze the adjacency list above and complete the following tasks to represent the graph in different formats.</p>
+                </div>
 
-            <p class="hint" style="color:#b00;">
-                Note: Any extra or invalid answers (such as extra edges, labels, or matrix entries) will result in a deduction from your score. The minimum possible score is zero.
-            </p>
+                <!-- Question 2: Graph Builder -->
+                <div class="graph-builder-container">
+                    <h3>2. Graph Builder</h3>
+                    <p>Draw the graph based on the edges you listed above. Enter the number of vertices, label each vertex, and connect vertices by clicking them.</p>
+                    
+                    <div class="graph-controls">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label for="vertexCountInput">Number of vertices:</label>
+                            <input type="number" id="vertexCountInput" min="2" max="10" value="5" class="vertex-count-input">
+                        </div>
+                        <span class="hint">Click vertices to select them, then click another vertex to create an edge</span>
+                    </div>
+                    
+                    <div id="vertexLabelsContainer" class="vertex-labels-container"></div>
+                    
+                    <div class="graph-canvas-container">
+                        <div id="graphCanvas"></div>
+                    </div>
+                    
+                    <div id="edgeListDisplay" class="edge-list-display"></div>
+                </div>
 
-        </fieldset>
+                <!-- Question 3: Adjacency Matrix -->
+                <div class="matrix-builder-container">
+                    <h3>3. Adjacency Matrix</h3>
+                    <p>Build the adjacency matrix for this graph. Enter <code>1</code> if there is an edge, <code>0</code> if there is none.</p>
+                    
+                    <div class="matrix-controls">
+                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                            <label for="matrixSizeInput">Matrix size:</label>
+                            <input type="number" id="matrixSizeInput" min="2" max="10" value="5" class="matrix-size-input">
+                        </div>
+                        <span class="hint">The matrix should be symmetric across the diagonal for undirected graphs</span>
+                    </div>
+                    
+                    <div id="matrixLabelsContainer" class="matrix-labels-container"></div>
+                    
+                    <div id="matrixTableWrapper"></div>
+                </div>
 
-        <div style="text-align:right; margin-top:1rem;">
-            <button type="button" id="savePart4Btn" style="background:#22863a;">Save Part 4</button>
-            <span id="savePart4Status" class="save-status"></span>
-        </div>
+                <!-- Warning Note -->
+                <div class="warning-note">
+                    <strong><i class="fas fa-exclamation-triangle"></i> Important:</strong>
+                    Any extra or invalid answers (such as extra edges, labels, or matrix entries) will result in a deduction from your score. The minimum possible score is zero.
+                </div>
 
-        <div class="nav-buttons">
-            <a href="/activity/dsalgo1/dsalgo1-finals-part3" class="button-link">Back to Part 3</a>
-            <button type="submit">Save Part 4 and Submit</button>
-        </div>
-    </form>
-</main>
+                <!-- Save Button -->
+                <div style="text-align: right; margin-top: 2rem;">
+                    <button type="button" id="savePart4Btn" class="btn btn-success">
+                        <i class="fas fa-save"></i> Save Part 4 Progress
+                    </button>
+                    <span id="savePart4Status" style="margin-left: 1rem; color: #059669; font-weight: 500;"></span>
+                </div>
+            </section>
+
+            <!-- Navigation & Submit -->
+            <nav class="navigation">
+                <div class="controls">
+                    <a href="/activity/dsalgo1/dsalgo1-finals-part3" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Part 3
+                    </a>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-info">
+                            <span id="answeredCount">0</span> fields answered
+                            <span id="progressPercentage">0%</span>
+                        </div>
+                        <div class="progress-track">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Submit Part 4 (0/0)
+                    </button>
+                </div>
+                
+                <!-- Quick navigation hint -->
+                <div style="text-align: center; margin-top: 10px; font-size: 0.875rem; color: #666;">
+                    <small>Tip: Answers are auto-saved every 30 seconds. Use Ctrl+S to save manually.</small>
+                </div>
+            </nav>
+        </form>
+    </div>
+
+    <!-- Timer Script -->
+    <script>
+        // Timer functionality (60 minutes for the exam)
+        let examTimer = 60 * 60;
+        const timerDisplay = document.getElementById('timerDisplay');
+        const timeRemaining = document.getElementById('timeRemaining');
+        
+        function updateTimer() {
+            if (!timerDisplay) return;
+            
+            const minutes = Math.floor(examTimer / 60);
+            const seconds = examTimer % 60;
+            timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (examTimer <= 600) { // 10 minutes
+                timeRemaining.style.borderLeftColor = '#ef4444';
+                timeRemaining.style.color = '#ef4444';
+                
+                if (examTimer <= 300) { // 5 minutes
+                    timeRemaining.style.opacity = (Math.sin(Date.now() / 500) + 1) / 2;
+                }
+            }
+            
+            if (examTimer > 0) {
+                examTimer--;
+            }
+        }
+        
+        let timerInterval;
+        document.addEventListener('DOMContentLoaded', () => {
+            timerInterval = setInterval(updateTimer, 1000);
+        });
+        
+        // Prevent accidental refresh
+        window.addEventListener('beforeunload', (e) => {
+            const form = document.getElementById('part4Form');
+            if (form) {
+                const answeredCount = Object.keys(window.currentAnswers || {}).length;
+                if (answeredCount > 0 && !window.isNavigatingAway) {
+                    e.preventDefault();
+                    e.returnValue = 'You have unsaved answers. Are you sure you want to leave?';
+                }
+            }
+        });
+    </script>
+
+    <!-- External JavaScript -->
+    <script src="/activity/dsalgo1/js/part4.js" defer></script>
 </body>
 </html>
