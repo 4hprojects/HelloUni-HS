@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Part 2 (Matching Type)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        h1, h2, h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .meta {
+            background: #f5f5f5;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .meta div {
+            margin-bottom: 0.5rem;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        legend {
+            font-weight: 600;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.75rem;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            vertical-align: top;
+        }
+        th {
+            background: #f0f0f0;
+        }
+        select {
+            width: 100%;
+        }
+        #message {
+            margin: 0.75rem 0;
+            color: red;
+        }
+        button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: #0066cc;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        a.button-link {
+            display: inline-block;
+            padding: 0.55rem 1.1rem;
+            background: #777;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+    </style>
+    <script src="/activity/dsalgo1/js/tabMonitor.js"></script>
+</head>
+<body>
+<main>
+    <h1>DSALGO1 Finals – Part 2</h1>
+    <p>
+        This part contains <strong>10 matching items</strong>.  
+        Answer all items before moving to the next part. Your answers will be saved when you submit this page.
+    </p>
+
+    <section class="meta">
+        <h2>Student Identification</h2>
+        <div>
+            <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span>
+        </div>
+        <div>
+            <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
+            <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
+        </div>
+    </section>
+
+    <form id="part2Form">
+        <input type="hidden" id="examID" value="dsalgo1-finals">
+
+        <div id="message"></div>
+
+        <!-- Matching Type A: Graph Terms (5 items) -->
+        <fieldset>
+            <legend>Matching Type A: Graph Terms (Items 1–5)</legend>
+            <p>
+                Match each term in <strong>Column A</strong> with the correct description in <strong>Column B</strong>.  
+                Choose the letter of the best answer.
+            </p>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Column A (Write the letter)</th>
+                    <th>Column B</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        1. Vertex  
+                        <br>
+                        <select name="m1" id="m1">
+                            <option value="">Select letter</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </td>
+                    <td rowspan="5">
+                        <strong>A.</strong> A point or node that represents an object in the graph. <br><br>
+                        <strong>B.</strong> A connection between two vertices. <br><br>
+                        <strong>C.</strong> A sequence of vertices connected by edges. <br><br>
+                        <strong>D.</strong> A path where the first and last vertex are the same. <br><br>
+                        <strong>E.</strong> An edge that stores a value like cost, time, or distance.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        2. Edge  
+                        <br>
+                        <select name="m2" id="m2">
+                            <option value="">Select letter</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        3. Path  
+                        <br>
+                        <select name="m3" id="m3">
+                            <option value="">Select letter</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        4. Cycle  
+                        <br>
+                        <select name="m4" id="m4">
+                            <option value="">Select letter</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        5. Weighted edge  
+                        <br>
+                        <select name="m5" id="m5">
+                            <option value="">Select letter</option>
+                            <option value="A">A</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+
+        <!-- Matching Type B: Algorithms (5 items) -->
+        <fieldset>
+            <legend>Matching Type B: Algorithms and Concepts (Items 6–10)</legend>
+            <p>
+                Match each item in <strong>Column A</strong> with the correct description in <strong>Column B</strong>.  
+                Choose the letter of the best answer.
+            </p>
+
+            <table>
+                <thead>
+                <tr>
+                    <th>Column A (Write the letter)</th>
+                    <th>Column B</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        6. Kruskal’s algorithm  
+                        <br>
+                        <select name="m6" id="m6">
+                            <option value="">Select letter</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                    </td>
+                    <td rowspan="5">
+                        <strong>F.</strong> Picks edges in increasing order of weight and skips those that form a cycle. <br><br>
+                        <strong>G.</strong> Starts from one vertex and keeps attaching the cheapest edge that connects a new vertex. <br><br>
+                        <strong>H.</strong> Explores a graph level by level, visiting all reachable vertices from a start vertex. <br><br>
+                        <strong>I.</strong> Explores level by level using only outgoing edges and arrow direction. <br><br>
+                        <strong>J.</strong> A spanning tree that connects all vertices with the smallest possible total edge cost.
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        7. Prim’s algorithm  
+                        <br>
+                        <select name="m7" id="m7">
+                            <option value="">Select letter</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        8. BFS on an undirected graph  
+                        <br>
+                        <select name="m8" id="m8">
+                            <option value="">Select letter</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        9. BFS on a directed graph  
+                        <br>
+                        <select name="m9" id="m9">
+                            <option value="">Select letter</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        10. Minimum Cost Spanning Tree (MCST)  
+                        <br>
+                        <select name="m10" id="m10">
+                            <option value="">Select letter</option>
+                            <option value="F">F</option>
+                            <option value="G">G</option>
+                            <option value="H">H</option>
+                            <option value="I">I</option>
+                            <option value="J">J</option>
+                        </select>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+
+        <div class="nav-buttons">
+            <a href="/activity/dsalgo1/dsalgo1-finals-part1" class="button-link">Back to Part 1</a>
+            <button type="submit">Save Part 2 and Go to Part 3</button>
+        </div>
+    </form>
+</main>
+
+<script src="/activity/dsalgo1/js/part2.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Information</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- You can plug in your global CSS here -->
+    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+</head>
+<body>
+    <main>
+        <h1>DSALGO1 Finals – Student Information</h1>
+        <p>Please fill in your details carefully. Use the correct exam code for your section.</p>
+
+        <form id="infoForm">
+            <!-- Hidden examID -->
+            <input type="hidden" name="examID" id="examID" value="dsalgo1-finals">
+
+            <div>
+                <label for="studentIDNumber">Student ID Number</label>
+                <input type="text" id="studentIDNumber" name="studentIDNumber" required>
+            </div>
+
+            <div>
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+
+            <div>
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+
+            <div>
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+
+            <div>
+                <label for="section">Section</label>
+                <select id="section" name="section" required>
+                    <option value="">Select your section</option>
+                    <option value="IDB3">IDB3</option>
+                    <option value="IDB4">IDB4</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="examCode">Exam Code</label>
+                <input type="text" id="examCode" name="examCode" required>
+                <small>
+                    IDB3: LETSGO! &nbsp; | &nbsp; IDB4: ICANDOIT!
+                </small>
+            </div>
+
+            <div id="message" style="color: red; margin-top: 0.5rem;"></div>
+
+            <button type="submit">Save and Proceed to Part 1</button>
+        </form>
+    </main>
+
+    <script>
+        async function loadExistingInfo(studentIDNumber) {
+            const examID = document.getElementById('examID').value;
+
+            try {
+                const res = await fetch('/activity/dsalgo1-finals/load', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ examID, studentIDNumber })
+                });
+
+                const data = await res.json();
+                if (!data.success || !data.data) {
+                    return;
+                }
+
+                const doc = data.data;
+
+                if (doc.firstName) document.getElementById('firstName').value = doc.firstName;
+                if (doc.lastName) document.getElementById('lastName').value = doc.lastName;
+                if (doc.email) document.getElementById('email').value = doc.email;
+                if (doc.section) document.getElementById('section').value = doc.section;
+                if (doc.examCode) document.getElementById('examCode').value = doc.examCode;
+            } catch (err) {
+                console.error('Load error:', err);
+            }
+        }
+
+        document.getElementById('studentIDNumber').addEventListener('blur', (e) => {
+            const id = e.target.value.trim();
+            if (id) {
+                loadExistingInfo(id);
+            }
+        });
+
+        document.getElementById('infoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = '';
+
+            const examID = document.getElementById('examID').value;
+            const studentIDNumber = document.getElementById('studentIDNumber').value.trim();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const section = document.getElementById('section').value;
+            const examCode = document.getElementById('examCode').value.trim();
+
+            if (!studentIDNumber || !firstName || !lastName || !email || !section || !examCode) {
+                messageEl.textContent = 'Please complete all fields.';
+                return;
+            }
+
+            const payload = {
+                examID,
+                studentIDNumber,
+                firstName,
+                lastName,
+                email,
+                section,
+                examCode,
+                pageNumber: 0,
+                answers: {} // nothing yet for answers
+            };
+
+            try {
+                const res = await fetch('/activity/dsalgo1-finals/save-page', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const data = await res.json();
+                if (!data.success) {
+                    messageEl.textContent = data.message || 'Failed to save. Please try again.';
+                    return;
+                }
+
+                // redirect to Part 1 (MCQ page)
+                window.location.href = '/activity/dsalgo1-finals-part1.html';
+            } catch (err) {
+                console.error('Save error:', err);
+                messageEl.textContent = 'An error occurred while saving. Please try again.';
+            }
+        });
+    </script>
+</body>
+</html>

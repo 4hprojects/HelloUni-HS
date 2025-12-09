@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Part 1 (Multiple Choice)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        h1, h2, h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        legend {
+            font-weight: 600;
+        }
+        .question {
+            margin-bottom: 1rem;
+        }
+        .question p {
+            margin: 0 0 0.3rem 0;
+        }
+        .question label {
+            display: block;
+            margin-left: 0.75rem;
+        }
+        .meta {
+            background: #f5f5f5;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .meta div {
+            margin-bottom: 0.5rem;
+        }
+        #message {
+            margin: 0.75rem 0;
+            color: red;
+        }
+        button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: #0066cc;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+
+        /* Prevent text selection and copying for all text except form controls */
+        body, .meta, fieldset, legend, .question, p, label, h1, h2, h3 {
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+        }
+
+        /* Allow selection for form controls (inputs, buttons) */
+        input, button, select, textarea {
+            user-select: auto;
+            -webkit-user-select: auto;
+            -ms-user-select: auto;
+        }
+    </style>
+
+    <!-- Tab monitoring script (already existing) -->
+    <script src="/activity/dsalgo1/js/tabMonitor.js"></script>
+
+    <!-- New external script for Part 1 page logic -->
+    <script src="/activity/dsalgo1/js/part1.js" defer></script>
+</head>
+<body>
+<main>
+    <h1>DSALGO1 Finals – Part 1</h1>
+    <p>
+        This part contains <strong>30 multiple choice questions</strong> on graphs, BFS, and Minimum Cost Spanning Trees.
+        Your answers will be saved when you submit this page.
+    </p>
+
+    <section class="meta">
+        <h2>Student Identification</h2>
+        <div>
+            <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span>
+        </div>
+        <div>
+            <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
+            <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
+        </div>
+    </section>
+
+    <form id="part1Form">
+        <input type="hidden" id="examID" value="dsalgo1-finals">
+        <div id="message"></div>
+
+        <!-- Section A: Graph Basics (10 items) -->
+        <fieldset>
+            <legend>Section A: Graph Basics (Items 1–10)</legend>
+
+            <div class="question" id="q1">
+                <p>1. Which statement best describes a graph in data structures?</p>
+                <label><input type="radio" name="q1" value="a"> A linear structure where each node has at most two children.</label>
+                <label><input type="radio" name="q1" value="b"> A non-linear structure made of vertices and edges.</label>
+                <label><input type="radio" name="q1" value="c"> A collection of sorted keys stored in an array.</label>
+                <label><input type="radio" name="q1" value="d"> A table that stores records in rows and columns.</label>
+            </div>
+
+            <div class="question" id="q2">
+                <p>2. What is a vertex in a graph?</p>
+                <label><input type="radio" name="q2" value="a"> A connection between two graphs.</label>
+                <label><input type="radio" name="q2" value="b"> A point or node that represents an object.</label>
+                <label><input type="radio" name="q2" value="c"> A path that returns to the starting point.</label>
+                <label><input type="radio" name="q2" value="d"> A value that stores the weight of an edge.</label>
+            </div>
+
+            <div class="question" id="q3">
+                <p>3. What is an edge in a graph?</p>
+                <label><input type="radio" name="q3" value="a"> A label attached to a vertex.</label>
+                <label><input type="radio" name="q3" value="b"> A connection between two vertices.</label>
+                <label><input type="radio" name="q3" value="c"> A list of all neighbours of a vertex.</label>
+                <label><input type="radio" name="q3" value="d"> A special type of path with no vertices.</label>
+            </div>
+
+            <div class="question" id="q4">
+                <p>4. Which notation represents an <strong>undirected</strong> edge between vertices u and v?</p>
+                <label><input type="radio" name="q4" value="a"> (u, v)</label>
+                <label><input type="radio" name="q4" value="b"> &lt;u, v&gt;</label>
+                <label><input type="radio" name="q4" value="c"> [u, v]</label>
+                <label><input type="radio" name="q4" value="d"> {u, v}</label>
+            </div>
+
+            <div class="question" id="q5">
+                <p>5. Which situation is best modelled as a <strong>directed</strong> graph?</p>
+                <label><input type="radio" name="q5" value="a"> Mutual friendships between classmates.</label>
+                <label><input type="radio" name="q5" value="b"> One-way streets in a city.</label>
+                <label><input type="radio" name="q5" value="c"> Undirected road between two towns.</label>
+                <label><input type="radio" name="q5" value="d"> Students enrolled in a course section.</label>
+            </div>
+
+            <div class="question" id="q6">
+                <p>6. Which statement describes a path in a graph?</p>
+                <label><input type="radio" name="q6" value="a"> A group of vertices that are all isolated.</label>
+                <label><input type="radio" name="q6" value="b"> A set of vertices with equal degree.</label>
+                <label><input type="radio" name="q6" value="c"> A sequence of vertices connected by edges.</label>
+                <label><input type="radio" name="q6" value="d"> A special vertex used as root.</label>
+            </div>
+
+            <div class="question" id="q7">
+                <p>7. What is a cycle in a graph?</p>
+                <label><input type="radio" name="q7" value="a"> A path that visits all vertices exactly once.</label>
+                <label><input type="radio" name="q7" value="b"> A path where the first and last vertex are the same.</label>
+                <label><input type="radio" name="q7" value="c"> A path with only one vertex.</label>
+                <label><input type="radio" name="q7" value="d"> Any path that uses weighted edges.</label>
+            </div>
+
+            <div class="question" id="q8">
+                <p>8. In an adjacency list, what does the entry <code>A: B, C</code> mean for an undirected graph?</p>
+                <label><input type="radio" name="q8" value="a"> A is connected only to B.</label>
+                <label><input type="radio" name="q8" value="b"> A is connected only to C.</label>
+                <label><input type="radio" name="q8" value="c"> A is connected to both B and C.</label>
+                <label><input type="radio" name="q8" value="d"> B and C are connected to each other only.</label>
+            </div>
+
+            <div class="question" id="q9">
+                <p>9. Which graph type has edges without direction and relationships that go both ways?</p>
+                <label><input type="radio" name="q9" value="a"> Directed graph</label>
+                <label><input type="radio" name="q9" value="b"> Weighted graph</label>
+                <label><input type="radio" name="q9" value="c"> Undirected graph</label>
+                <label><input type="radio" name="q9" value="d"> Mixed graph</label>
+            </div>
+
+            <div class="question" id="q10">
+                <p>10. Which statement about weighted graphs is correct?</p>
+                <label><input type="radio" name="q10" value="a"> All edges are considered equal.</label>
+                <label><input type="radio" name="q10" value="b"> Each edge can store a value such as cost or distance.</label>
+                <label><input type="radio" name="q10" value="c"> Each vertex must have a weight that equals its degree.</label>
+                <label><input type="radio" name="q10" value="d"> Weighted graphs cannot have cycles.</label>
+            </div>
+        </fieldset>
+
+        <!-- Section B: BFS Concepts (10 items) -->
+        <fieldset>
+            <legend>Section B: BFS Concepts (Items 11–20)</legend>
+
+            <div class="question" id="q11">
+                <p>11. What is the main idea of Breadth-First Search (BFS)?</p>
+                <label><input type="radio" name="q11" value="a"> Explore one path as deep as possible, then backtrack.</label>
+                <label><input type="radio" name="q11" value="b"> Visit vertices level by level starting from a given vertex.</label>
+                <label><input type="radio" name="q11" value="c"> Always visit the vertex with the smallest ID first.</label>
+                <label><input type="radio" name="q11" value="d"> Repeatedly split the graph into two halves.</label>
+            </div>
+
+            <div class="question" id="q12">
+                <p>12. When does a vertex enter the <strong>visited set</strong> in BFS?</p>
+                <label><input type="radio" name="q12" value="a"> When you finish processing all of its neighbours.</label>
+                <label><input type="radio" name="q12" value="b"> When it is removed from the queue.</label>
+                <label><input type="radio" name="q12" value="c"> As soon as it is discovered as a neighbour.</label>
+                <label><input type="radio" name="q12" value="d"> Only after all vertices at the same level are processed.</label>
+            </div>
+
+            <div class="question" id="q13">
+                <p>13. In an <strong>undirected</strong> graph, if there is an edge A–B, which moves are allowed?</p>
+                <label><input type="radio" name="q13" value="a"> From A to B only.</label>
+                <label><input type="radio" name="q13" value="b"> From B to A only.</label>
+                <label><input type="radio" name="q13" value="c"> From A to B and from B to A.</label>
+                <label><input type="radio" name="q13" value="d"> No move is allowed until a weight is given.</label>
+            </div>
+
+            <div class="question" id="q14">
+                <p>14. In a <strong>directed</strong> graph, what does the edge (A, B) mean for BFS?</p>
+                <label><input type="radio" name="q14" value="a"> BFS can move from B to A only.</label>
+                <label><input type="radio" name="q14" value="b"> BFS can move from A to B only.</label>
+                <label><input type="radio" name="q14" value="c"> BFS can move both A → B and B → A.</label>
+                <label><input type="radio" name="q14" value="d"> BFS cannot use this edge.</label>
+            </div>
+
+            <div class="question" id="q15">
+                <p>15. Why does the <strong>order of neighbours</strong> in the adjacency list matter for BFS?</p>
+                <label><input type="radio" name="q15" value="a"> It changes which edges exist in the graph.</label>
+                <label><input type="radio" name="q15" value="b"> It changes the BFS visit order while keeping the graph the same.</label>
+                <label><input type="radio" name="q15" value="c"> It changes the number of vertices in the graph.</label>
+                <label><input type="radio" name="q15" value="d"> It has no effect on BFS.</label>
+            </div>
+
+            <div class="question" id="q16">
+                <p>16. What does BFS use the visit order for?</p>
+                <label><input type="radio" name="q16" value="a"> To know which vertex to delete next.</label>
+                <label><input type="radio" name="q16" value="b"> To know the order in which vertices were processed.</label>
+                <label><input type="radio" name="q16" value="c"> To store edge weights.</label>
+                <label><input type="radio" name="q16" value="d"> To detect whether the graph is connected.</label>
+            </div>
+
+            <div class="question" id="q17">
+                <p>17. In a directed graph, why can some vertices be unreachable from the starting vertex?</p>
+                <label><input type="radio" name="q17" value="a"> Because BFS ignores edges with weights.</label>
+                <label><input type="radio" name="q17" value="b"> Because BFS cannot move against the direction of arrows.</label>
+                <label><input type="radio" name="q17" value="c"> Because BFS always skips vertices with in-degree greater than one.</label>
+                <label><input type="radio" name="q17" value="d"> Because BFS only works for undirected graphs.</label>
+            </div>
+
+            <div class="question" id="q18">
+                <p>18. What does the <strong>distance level</strong> of a vertex in BFS represent?</p>
+                <label><input type="radio" name="q18" value="a"> The number of cycles in the graph.</label>
+                <label><input type="radio" name="q18" value="b"> The number of edges on the shortest path from the start vertex.</label>
+                <label><input type="radio" name="q18" value="c"> The degree of the vertex.</label>
+                <label><input type="radio" name="q18" value="d"> The number of neighbours it has.</label>
+            </div>
+
+            <div class="question" id="q19">
+                <p>19. When does BFS stop?</p>
+                <label><input type="radio" name="q19" value="a"> When all vertices have at least one incoming edge.</label>
+                <label><input type="radio" name="q19" value="b"> When every vertex has been visited or no new vertex can be discovered.</label>
+                <label><input type="radio" name="q19" value="c"> When the queue becomes full.</label>
+                <label><input type="radio" name="q19" value="d"> When the degree of the current vertex is zero.</label>
+            </div>
+
+            <div class="question" id="q20">
+                <p>20. Which set correctly describes what the <strong>visited set</strong> stores during BFS?</p>
+                <label><input type="radio" name="q20" value="a"> Only vertices that were fully processed.</label>
+                <label><input type="radio" name="q20" value="b"> Only vertices that are leaves.</label>
+                <label><input type="radio" name="q20" value="c"> All vertices that have been discovered so far.</label>
+                <label><input type="radio" name="q20" value="d"> Only vertices with no neighbours.</label>
+            </div>
+        </fieldset>
+
+        <!-- Section C: MCST Concepts (10 items) -->
+        <fieldset>
+            <legend>Section C: MCST Concepts (Items 21–30)</legend>
+
+            <div class="question" id="q21">
+                <p>21. What is a spanning tree of a connected graph with V vertices?</p>
+                <label><input type="radio" name="q21" value="a"> A subgraph with V vertices and V edges.</label>
+                <label><input type="radio" name="q21" value="b"> A subgraph that contains all vertices and has no cycles.</label>
+                <label><input type="radio" name="q21" value="c"> Any subgraph with at least one cycle.</label>
+                <label><input type="radio" name="q21" value="d"> A tree that uses only the edges with maximum weight.</label>
+            </div>
+
+            <div class="question" id="q22">
+                <p>22. How many edges does a spanning tree of a connected graph with V vertices have?</p>
+                <label><input type="radio" name="q22" value="a"> V − 2</label>
+                <label><input type="radio" name="q22" value="b"> V − 1</label>
+                <label><input type="radio" name="q22" value="c"> V</label>
+                <label><input type="radio" name="q22" value="d"> 2V</label>
+            </div>
+
+            <div class="question" id="q23">
+                <p>23. What is a Minimum Cost Spanning Tree (MCST)?</p>
+                <label><input type="radio" name="q23" value="a"> Any spanning tree that uses the largest number of edges.</label>
+                <label><input type="radio" name="q23" value="b"> A spanning tree that has at least one cycle.</label>
+                <label><input type="radio" name="q23" value="c"> A spanning tree with the smallest possible total edge weight.</label>
+                <label><input type="radio" name="q23" value="d"> A spanning tree that connects only a subset of vertices.</label>
+            </div>
+
+            <div class="question" id="q24">
+                <p>24. Which step is part of <strong>Kruskal’s algorithm</strong> for finding an MCST?</p>
+                <label><input type="radio" name="q24" value="a"> Start from a chosen vertex and always expand from it.</label>
+                <label><input type="radio" name="q24" value="b"> Sort all edges by weight and pick the smallest edge that does not form a cycle.</label>
+                <label><input type="radio" name="q24" value="c"> Use a queue to process vertices in layers.</label>
+                <label><input type="radio" name="q24" value="d"> Always pick the edge farthest from the start vertex.</label>
+            </div>
+
+            <div class="question" id="q25">
+                <p>25. Which statement describes <strong>Prim’s algorithm</strong>?</p>
+                <label><input type="radio" name="q25" value="a"> It builds the MCST by adding one vertex at a time, starting from any vertex.</label>
+                <label><input type="radio" name="q25" value="b"> It removes the highest-cost edges until a tree remains.</label>
+                <label><input type="radio" name="q25" value="c"> It always visits vertices in alphabetical order.</label>
+                <label><input type="radio" name="q25" value="d"> It first builds an adjacency matrix and then deletes rows.</label>
+            </div>
+
+            <div class="question" id="q26">
+                <p>26. When building an MCST, why must cycles be avoided?</p>
+                <label><input type="radio" name="q26" value="a"> Cycles increase the number of vertices.</label>
+                <label><input type="radio" name="q26" value="b"> Cycles make the spanning tree disconnected.</label>
+                <label><input type="radio" name="q26" value="c"> Cycles mean some edges are not needed for connectivity.</label>
+                <label><input type="radio" name="q26" value="d"> Cycles are required only in directed graphs.</label>
+            </div>
+
+            <div class="question" id="q27">
+                <p>27. In Kruskal’s algorithm, when do you <strong>skip</strong> an edge while building the MCST?</p>
+                <label><input type="radio" name="q27" value="a"> When the edge has the smallest weight.</label>
+                <label><input type="radio" name="q27" value="b"> When the edge connects two vertices that are already connected in the current tree.</label>
+                <label><input type="radio" name="q27" value="c"> When the edge is incident to a vertex with degree one.</label>
+                <label><input type="radio" name="q27" value="d"> When the edge appears last in the sorted list.</label>
+            </div>
+
+            <div class="question" id="q28">
+                <p>28. For graphs with unique edge weights, what can you say about the MCST produced by Kruskal and Prim?</p>
+                <label><input type="radio" name="q28" value="a"> They always produce MCSTs with different total cost.</label>
+                <label><input type="radio" name="q28" value="b"> They always produce MCSTs with the same total cost.</label>
+                <label><input type="radio" name="q28" value="c"> Only Prim produces a valid MCST.</label>
+                <label><input type="radio" name="q28" value="d"> Only Kruskal produces a valid MCST.</label>
+            </div>
+
+            <div class="question" id="q29">
+                <p>29. Which of the following is a <strong>valid check</strong> to verify that a structure is an MCST?</p>
+                <label><input type="radio" name="q29" value="a"> It has V edges and contains at least one cycle.</label>
+                <label><input type="radio" name="q29" value="b"> It includes all vertices, has V − 1 edges, and has no cycles.</label>
+                <label><input type="radio" name="q29" value="c"> It uses only the highest-cost edges.</label>
+                <label><input type="radio" name="q29" value="d"> It has fewer vertices than the original graph.</label>
+            </div>
+
+            <div class="question" id="q30">
+                <p>30. In a network design problem, why is an MCST useful?</p>
+                <label><input type="radio" name="q30" value="a"> It uses as many edges as possible to increase redundancy.</label>
+                <label><input type="radio" name="q30" value="b"> It connects all locations with minimum total connection cost.</label>
+                <label><input type="radio" name="q30" value="c"> It removes the need to consider edge weights.</label>
+                <label><input type="radio" name="q30" value="d"> It always favours the longest possible routes.</label>
+            </div>
+        </fieldset>
+
+        <button type="submit">Save Part 1 and Go to Part 2</button>
+    </form>
+</main>
+</body>
+</html>

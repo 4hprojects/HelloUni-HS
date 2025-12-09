@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Information</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/dsalgo1.css">
+</head>
+<body>
+    <main class="dsalgo-container">
+        <header class="dsalgo-header">
+            <h1 class="dsalgo-title">DSALGO1 Finals – Student Information</h1>
+            <p class="dsalgo-subtitle">Please fill in your details carefully. Use the correct exam code for your section.</p>
+        </header>
+
+        <form id="infoForm" class="dsalgo-form">
+            <input type="hidden" name="examID" id="examID" value="dsalgo1-finals">
+
+            <div class="form-group">
+                <label for="studentIDNumber">Student ID Number</label>
+                <input type="text" id="studentIDNumber" name="studentIDNumber"
+                       placeholder="Enter your student ID" required
+                       maxlength="8" pattern="\d{1,8}" title="Up to 8 digit ID number">
+            </div>
+            
+            <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input type="text" id="firstName" name="firstName"
+                       placeholder="Enter your first name" required
+                       maxlength="30">
+            </div>
+            
+            <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input type="text" id="lastName" name="lastName"
+                       placeholder="Enter your last name" required
+                       maxlength="30">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email"
+                       placeholder="student@example.com" required
+                       maxlength="50">
+            </div>
+            
+            <div class="form-group">
+                <label for="section">Section</label>
+                <select id="section" name="section" required>
+                    <option value="">Select your section</option>
+                    <option value="IDB3">IDB3</option>
+                    <option value="IDB4">IDB4</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="examCode">Exam Code</label>
+                <input type="text" id="examCode" name="examCode"
+                       placeholder="Enter exam code" required autocomplete="off"
+                       maxlength="12">
+            </div>
+            
+            <div id="message" class="message"></div>
+            
+            <button type="submit" class="dsalgo-button">Save and Proceed to Part 1</button>
+        </form>
+    </main>
+
+    <script>
+        // Load info from MongoDB if studentIDNumber exists
+        async function loadExistingInfo(studentIDNumber) {
+            const examID = document.getElementById('examID').value;
+            try {
+                const res = await fetch('/api/activity/dsalgo1-finals/info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ examID, studentIDNumber, action: 'load' })
+                });
+                const data = await res.json();
+                if (!data.success || !data.data) return;
+                const doc = data.data;
+                if (doc.firstName) document.getElementById('firstName').value = doc.firstName;
+                if (doc.lastName) document.getElementById('lastName').value = doc.lastName;
+                if (doc.email) document.getElementById('email').value = doc.email;
+                if (doc.section) document.getElementById('section').value = doc.section;
+                if (doc.examCode) document.getElementById('examCode').value = doc.examCode;
+                if (doc.answers && doc.answers.completed) {
+                    document.getElementById('message').textContent = "You have already completed the exam. You cannot continue.";
+                    document.getElementById('infoForm').querySelector('button[type="submit"]').disabled = true;
+                }
+            } catch (err) {
+                console.error('Load error:', err);
+            }
+        }
+
+        document.getElementById('studentIDNumber').addEventListener('blur', (e) => {
+            const id = e.target.value.trim();
+            if (id) loadExistingInfo(id);
+        });
+
+        document.getElementById('infoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const messageEl = document.getElementById('message');
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            messageEl.textContent = '';
+            messageEl.className = 'message';
+            submitBtn.classList.add('loading');
+
+            const examID = document.getElementById('examID').value;
+            const studentIDNumber = document.getElementById('studentIDNumber').value.trim();
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const section = document.getElementById('section').value;
+            const examCode = document.getElementById('examCode').value.trim();
+
+            // Validation
+            if (!/^\d{1,8}$/.test(studentIDNumber)) {
+                messageEl.textContent = 'Student ID must be up to 8 digits.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+            if (firstName.length > 30 || lastName.length > 30) {
+                messageEl.textContent = 'First and Last Name must be at most 30 characters.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+            if (email.length > 50) {
+                messageEl.textContent = 'Email must be at most 50 characters.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+            if (examCode.length > 12) {
+                messageEl.textContent = 'Exam code must be at most 12 characters.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+            if (!studentIDNumber || !firstName || !lastName || !email || !section || !examCode) {
+                messageEl.textContent = 'Please complete all fields.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+            if ((section === 'IDB3' && examCode !== 'LETSGO!') ||
+                (section === 'IDB4' && examCode !== 'ICANDOIT!')) {
+                messageEl.textContent = 'Exam code does not match your section.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+                return;
+            }
+
+            const payload = {
+                examID,
+                studentIDNumber,
+                firstName,
+                lastName,
+                email,
+                section,
+                examCode,
+                pageNumber: 0,
+                answers: {},
+                action: 'save'
+            };
+
+            try {
+                const res = await fetch('/api/activity/dsalgo1-finals/info', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                
+                submitBtn.classList.remove('loading');
+                
+                if (!data.success) {
+                    messageEl.textContent = data.message || 'Failed to save. Please try again.';
+                    messageEl.className = 'message error';
+                    return;
+                }
+                
+                sessionStorage.setItem('studentIDNumber', studentIDNumber);
+                messageEl.textContent = 'Information saved successfully! Redirecting...';
+                messageEl.className = 'message success';
+                setTimeout(() => {
+                    window.location.href = '/activity/dsalgo1/dsalgo1-finals-part1.html';
+                }, 1000);
+                
+            } catch (err) {
+                console.error('Save error:', err);
+                messageEl.textContent = 'An error occurred while saving. Please try again.';
+                messageEl.className = 'message error';
+                submitBtn.classList.remove('loading');
+            }
+        });
+
+        const storedID = sessionStorage.getItem('studentIDNumber');
+    </script>
+</body>
+</html>

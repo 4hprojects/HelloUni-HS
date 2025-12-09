@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Part 3 (High-Level Tasks)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <link rel="stylesheet" href="/css/main.css"> -->
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.5;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+        h1, h2, h3 {
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .meta {
+            background: #f5f5f5;
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        .meta div {
+            margin-bottom: 0.5rem;
+        }
+        fieldset {
+            border: 1px solid #ccc;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        legend {
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 0.5rem;
+            margin-top: 0.25rem;
+            resize: vertical;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 0.4rem;
+            margin-top: 0.25rem;
+        }
+        code {
+            background: #f3f3f3;
+            padding: 0.1rem 0.25rem;
+        }
+        #message {
+            margin: 0.75rem 0;
+            color: red;
+        }
+        button {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            cursor: pointer;
+            background: #0066cc;
+            color: #fff;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button:disabled {
+            opacity: 0.6;
+            cursor: default;
+        }
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 1rem;
+        }
+        a.button-link {
+            display: inline-block;
+            padding: 0.55rem 1.1rem;
+            background: #777;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .hint {
+            font-size: 0.9rem;
+            color: #555;
+        }
+        ol {
+            padding-left: 1.2rem;
+        }
+        .bfs-flex {
+            display: flex;
+            gap: 2rem;
+        }
+        .bfs-given {
+            flex: 1 1 300px;
+            background: #f8f9fa;
+            border-right: 2px solid #e0e0e0;
+            padding-right: 1.5rem;
+            min-width: 270px;
+            max-width: 340px;
+        }
+        .bfs-questions {
+            flex: 2 1 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .bfs-questions label {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+        .bfs-questions textarea {
+            width: 100%;
+            min-height: 48px;
+            margin-bottom: 0.5rem;
+            resize: vertical;
+        }
+        .distance-row {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.35rem;
+        }
+        .distance-row span {
+            width: 90px;
+            font-size: 0.9rem;
+        }
+        .distance-row input {
+            flex: 1;
+        }
+        #addDistanceBtn {
+            margin-top: 0.25rem;
+            margin-bottom: 0.5rem;
+            background: #22863a;
+        }
+        .graph-box {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.graph-svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Edges */
+.edge {
+    stroke: #999;
+    stroke-width: 2;
+}
+
+/* Vertices (circles) */
+.vertex {
+    fill: #fff;
+    stroke: #333;
+    stroke-width: 2;
+}
+
+/* Labels inside the circles */
+.vertex-label {
+    font-size: 14px;
+    font-weight: 600;
+    text-anchor: middle;
+    dominant-baseline: middle;
+}
+
+        @media (max-width: 900px) {
+            .bfs-flex {
+                flex-direction: column;
+            }
+            .bfs-given {
+                border-right: none;
+                border-bottom: 2px solid #e0e0e0;
+                padding-right: 0;
+                padding-bottom: 1rem;
+                max-width: none;
+            }
+        }
+    </style>
+    <script src="/activity/dsalgo1/js/tabMonitor.js"></script>
+    <!-- Remove the <script>...</script> block at the end of the file and replace with: -->
+<script src="/activity/dsalgo1/js/part3.js"></script>
+</head>
+<body>
+<main>
+    <h1>DSALGO1 Finals – Part 3 (High-Level Tasks)</h1>
+    <p>
+        This part contains high-level tasks on BFS (undirected and directed graphs), Minimum Cost Spanning Tree, 
+        and graph representations. Answer clearly and show your reasoning where requested.
+        Your answers will be saved when you submit this page.
+    </p>
+
+    <section class="meta">
+        <h2>Student Identification</h2>
+        <div>
+            <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span>
+        </div>
+        <div>
+            <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
+            <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
+        </div>
+    </section>
+
+    <form id="part3Form">
+        <input type="hidden" id="examID" value="dsalgo1-finals">
+
+        <div id="message"></div>
+
+        <!-- 3A: BFS on Undirected Graph -->
+        <fieldset>
+            <legend>Part 3A: BFS on an Undirected Graph</legend>
+            <div class="bfs-flex">
+                <!-- LEFT PANEL: Given + Adjacency List + Unique Edges -->
+                <div class="bfs-given">
+    <h3>Graph</h3>
+    <div class="graph-box">
+        <svg viewBox="0 0 260 160" class="graph-svg" aria-labelledby="graph-title">
+            <title id="graph-title">Undirected graph with vertices A, B, C, D, E, F</title>
+
+            <!-- Edges -->
+            <line class="edge" x1="130" y1="30"  x2="80"  y2="80" />
+            <line class="edge" x1="130" y1="30"  x2="180" y2="80" />
+            <line class="edge" x1="80"  y1="80"  x2="50"  y2="130" />
+            <line class="edge" x1="80"  y1="80"  x2="110" y2="130" />
+            <line class="edge" x1="180" y1="80"  x2="210" y2="130" />
+
+            <!-- Vertices -->
+            <!-- A -->
+            <circle class="vertex" cx="130" cy="30" r="16" />
+            <text class="vertex-label" x="130" y="30">A</text>
+
+            <!-- B -->
+            <circle class="vertex" cx="80" cy="80" r="16" />
+            <text class="vertex-label" x="80" y="80">B</text>
+
+            <!-- C -->
+            <circle class="vertex" cx="180" cy="80" r="16" />
+            <text class="vertex-label" x="180" y="80">C</text>
+
+            <!-- D -->
+            <circle class="vertex" cx="50" cy="130" r="16" />
+            <text class="vertex-label" x="50" y="130">D</text>
+
+            <!-- E -->
+            <circle class="vertex" cx="110" cy="130" r="16" />
+            <text class="vertex-label" x="110" y="130">E</text>
+
+            <!-- F -->
+            <circle class="vertex" cx="210" cy="130" r="16" />
+            <text class="vertex-label" x="210" y="130">F</text>
+        </svg>
+    </div>
+</div>
+
+                    <label style="margin-top:1rem;">1. Write the adjacency list for the graph.</label>
+<div id="adjacencyListInputs" style="margin-bottom:1rem;">
+    <label for="p3_1_A">A:</label>
+    <input type="text" id="p3_1_A" name="p3_1_A" placeholder="e.g. X, Y">
+    <label for="p3_1_B">B:</label>
+    <input type="text" id="p3_1_B" name="p3_1_B" placeholder="e.g. X, Y, Z">
+    <label for="p3_1_C">C:</label>
+    <input type="text" id="p3_1_C" name="p3_1_C" placeholder="e.g. X, Y">
+    <label for="p3_1_D">D:</label>
+    <input type="text" id="p3_1_D" name="p3_1_D" placeholder="e.g. X">
+    <label for="p3_1_E">E:</label>
+    <input type="text" id="p3_1_E" name="p3_1_E" placeholder="e.g. X">
+    <label for="p3_1_F">F:</label>
+    <input type="text" id="p3_1_F" name="p3_1_F" placeholder="e.g. X">
+</div>
+
+                    <label style="margin-top:1rem;">2. List all unique edges of the graph.</label>
+<div id="uniqueEdgesInputs" style="margin-bottom:1rem;">
+    <label for="p3_2_1">Edge 1:</label>
+    <input type="text" id="p3_2_1" name="p3_2_1" placeholder="e.g. X–Y">
+    <label for="p3_2_2">Edge 2:</label>
+    <input type="text" id="p3_2_2" name="p3_2_2" placeholder="e.g. X–Y">
+    <label for="p3_2_3">Edge 3:</label>
+    <input type="text" id="p3_2_3" name="p3_2_3" placeholder="e.g. X–Y">
+    <label for="p3_2_4">Edge 4:</label>
+    <input type="text" id="p3_2_4" name="p3_2_4" placeholder="e.g. X–Y">
+    <label for="p3_2_5">Edge 5:</label>
+    <input type="text" id="p3_2_5" name="p3_2_5" placeholder="e.g. X–Y">
+</div>
+
+                </div>
+
+                <!-- RIGHT PANEL: BFS Questions -->
+                <div class="bfs-questions">
+                    <div class="hint" style="margin-bottom:1rem;">
+                        <strong>Instructions:</strong> <span style="color:#d00;">Start BFS at vertex <b>B</b></span>. Answer all questions below based only on the graph above.
+                    </div>
+                    <label for="p3_3" style="margin-top:1rem;">3. Write the BFS visit order starting from B.</label>
+<div id="bfsOrderInputs" style="margin-bottom:1rem; display: flex; align-items: center; gap: 8px;">
+    <input type="text" id="p3_3_1" name="p3_3_1" maxlength="1" style="width:40px;" placeholder="e.g. X">
+    <span>-</span>
+    <input type="text" id="p3_3_2" name="p3_3_2" maxlength="1" style="width:40px;" placeholder="e.g. X">
+    <span>-</span>
+    <input type="text" id="p3_3_3" name="p3_3_3" maxlength="1" style="width:40px;" placeholder="e.g. X">
+    <span>-</span>
+    <input type="text" id="p3_3_4" name="p3_3_4" maxlength="1" style="width:40px;" placeholder="e.g. X">
+    <span>-</span>
+    <input type="text" id="p3_3_5" name="p3_3_5" maxlength="1" style="width:40px;" placeholder="e.g. X">
+    <span>-</span>
+    <input type="text" id="p3_3_6" name="p3_3_6" maxlength="1" style="width:40px;" placeholder="e.g. X">
+</div>
+
+                    <label for="p3_4">4. Show the final visited set after BFS from B finishes. <span style="color:#555;font-size:0.95em;">(use spaces)</span></label>
+<input type="text" id="p3_4_input" name="p3_4_input" placeholder="Type: A B C D E F" style="width:100%; margin-bottom:0.5rem;">
+<div id="p3_4_format" style="margin-bottom:0.5rem; color:#22863a; font-weight:500;"></div>
+<textarea id="p3_4" name="p3_4" placeholder="Example format: {A, B, C, D, E, F}" style="display:none;"></textarea>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const input = document.getElementById('p3_4_input');
+    const textarea = document.getElementById('p3_4');
+    const formatDiv = document.getElementById('p3_4_format');
+    if (input && textarea && formatDiv) {
+        function updateFormat() {
+            let vals = input.value.split(/[\s,]+/).map(v => v.trim().toUpperCase()).filter(v => v);
+            vals = [...new Set(vals)];
+            const formatted = vals.length ? `{${vals.join(', ')}}` : '';
+            textarea.value = formatted;
+            formatDiv.textContent = formatted ? `Your answer: ${formatted}` : '';
+        }
+        input.addEventListener('blur', updateFormat);
+        input.addEventListener('input', () => {
+            formatDiv.textContent = '';
+        });
+    }
+});
+</script>
+
+                    <label>5. Group the vertices by distance (in edges) from B.</label>
+                    <p class="hint">
+                        Start with Distance 0. Use the button to add more distance levels as needed.
+                    </p>
+                    <div id="distanceGroupsContainer">
+                        <div class="distance-row">
+                            <span>Distance 0:</span>
+                            <input type="text" class="distance-input" placeholder="Example: B">
+                        </div>
+                    </div>
+                    <button type="button" id="addDistanceBtn">Add distance level</button>
+                    <!-- Hidden field where all distance groups will be stored before submit -->
+                    <textarea id="p3_5" name="p3_5" style="display:none;"></textarea>
+                </div>
+            </div>
+        </fieldset>
+        <div style="text-align:right; margin-top:1rem;">
+            <button type="button" id="savePart3ABtn" style="background:#22863a;">Save Part 3A</button>
+            <span id="savePart3AStatus" style="margin-left:1rem; color:#22863a; font-weight:500;"></span>
+        </div>
+
+        <!-- 3B: BFS on Directed Graph -->
+        <fieldset>
+            <legend>Part 3B: BFS on a Directed Graph</legend>
+            <p>
+                Consider the following directed graph. The edges (with direction) are:
+            </p>
+            <ul>
+                <li>A → B</li>
+                <li>A → C</li>
+                <li>A → D</li>
+                <li>B → E</li>
+                <li>C → D</li>
+                <li>D → E</li>
+                <li>E → F</li>
+                <li>F → A</li>
+            </ul>
+
+<p>The adjacency list (<strong>enter neighbours in ascending order</strong>) is:</p>
+<div id="adjacencyListInputs3B" style="margin-bottom:1rem;">
+    <label for="p3B_A">A:</label>
+    <input type="text" id="p3B_A" name="p3B_A" placeholder="X, X, X">
+    <label for="p3B_B">B:</label>
+    <input type="text" id="p3B_B" name="p3B_B" placeholder="X">
+    <label for="p3B_C">C:</label>
+    <input type="text" id="p3B_C" name="p3B_C" placeholder="X">
+    <label for="p3B_D">D:</label>
+    <input type="text" id="p3B_D" name="p3B_D" placeholder="X">
+    <label for="p3B_E">E:</label>
+    <input type="text" id="p3B_E" name="p3B_E" placeholder="X">
+    <label for="p3B_F">F:</label>
+    <input type="text" id="p3B_F" name="p3B_F" placeholder="X">
+</div>
+
+  <div>
+    <label>Click two nodes to add a directed edge (arrow).</label>
+  </div>
+</div>
+
+            <p class="hint">
+                Start BFS at vertex <strong>A</strong>. Only follow the direction of arrows (do not go backwards).
+            </p>
+
+            <label for="p3_6" style="margin-top:1rem;">6. Build the graph based on the given data.</label>
+<p class="hint" style="margin-bottom:1rem;">
+    <strong>Reminder:</strong> Please enter neighbours in <span style="color:#d00;">ascending order</span> for each vertex.
+</p>
+<div id="graph-builder">
+  <svg width="480" height="250">
+    <!-- Pre-drawn circles for A, B, C, D, E, F -->
+    <circle id="node-A" cx="60" cy="120" r="20" fill="#fff" stroke="#333"/>
+    <text x="60" y="125" text-anchor="middle" font-size="16">A</text>
+    <circle id="node-B" cx="160" cy="60" r="20" fill="#fff" stroke="#333"/>
+    <text x="160" y="65" text-anchor="middle" font-size="16">B</text>
+    <circle id="node-C" cx="160" cy="180" r="20" fill="#fff" stroke="#333"/>
+    <text x="160" y="185" text-anchor="middle" font-size="16">C</text>
+    <circle id="node-D" cx="260" cy="120" r="20" fill="#fff" stroke="#333"/>
+    <text x="260" y="125" text-anchor="middle" font-size="16">D</text>
+    <circle id="node-E" cx="360" cy="120" r="20" fill="#fff" stroke="#333"/>
+    <text x="360" y="125" text-anchor="middle" font-size="16">E</text>
+    <circle id="node-F" cx="60" cy="40" r="20" fill="#fff" stroke="#333"/>
+    <text x="60" y="45" text-anchor="middle" font-size="16">F</text>
+    <!-- Edges will be drawn dynamically with JS as <line> or <path> elements -->
+  </svg>
+
+            <label for="p3_7" style="margin-top:1rem;">7. Write the BFS visit order starting from A.</label>
+<div id="bfsOrderInputs3B" style="margin-bottom:1rem; display: flex; align-items: center; gap: 8px;">
+    <input type="text" id="p3_7_1" name="p3_7_1" maxlength="1" style="width:40px;" placeholder="">
+    <span>-</span>
+    <input type="text" id="p3_7_2" name="p3_7_2" maxlength="1" style="width:40px;" placeholder="">
+    <span>-</span>
+    <input type="text" id="p3_7_3" name="p3_7_3" maxlength="1" style="width:40px;" placeholder="">
+    <span>-</span>
+    <input type="text" id="p3_7_4" name="p3_7_4" maxlength="1" style="width:40px;" placeholder="">
+    <span>-</span>
+    <input type="text" id="p3_7_5" name="p3_7_5" maxlength="1" style="width:40px;" placeholder="">
+    <span>-</span>
+    <input type="text" id="p3_7_6" name="p3_7_6" maxlength="1" style="width:40px;" placeholder="">
+</div>
+
+            <label for="p3_8">8. After BFS from A, list all vertices that are <strong>reachable</strong> from A.</label>
+<input type="text" id="p3_8_input" name="p3_8_input" placeholder="Type: A B C D E F" style="width:100%; margin-bottom:0.5rem;">
+<div id="p3_8_format" style="margin-bottom:0.5rem; color:#22863a; font-weight:500;"></div>
+<textarea id="p3_8" name="p3_8" placeholder="Example format: {A, B, C, D, E, F}" style="display:none;"></textarea>
+
+            <label for="p3_9">9. Are there any vertices that are <strong>unreachable</strong> from A? If yes, list them. If none, write 'None'.</label>
+        <input type="text" id="p3_9" name="p3_9" style="width:220px; margin-bottom:0.5rem;" placeholder="None or e.g. F">
+
+        </fieldset>
+<div style="text-align:right; margin-top:1rem;">
+    <button type="button" id="savePart3BBtn" style="background:#22863a;">Save Part 3B</button>
+    <span id="savePart3BStatus" style="margin-left:1rem; color:#22863a; font-weight:500;"></span>
+</div>
+
+        <!-- 3C: Minimum Cost Spanning Tree (MCST) -->
+        <fieldset>
+            <legend>Part 3C: Minimum Cost Spanning Tree (Kruskal and Prim)</legend>
+            <h3>Graph 1 – Use Kruskal’s Algorithm</h3>
+            <p>
+                Consider a connected, undirected weighted graph with vertices {A, B, C, D, E} and the following edges:
+            </p>
+<pre>
+A - B  (weight 2)
+A - C  (weight 3)
+B - C  (weight 1)
+B - D  (weight 4)
+C - E  (weight 5)
+D - E  (weight 7)
+</pre>
+
+            <label for="p3_10">
+    10. List all edges sorted by increasing weight. 
+    <br>
+    <span style="font-size:0.97em; color:#555;">
+       11. For each edge, enter the edge and its weight, then check the box if you select it for the MCST using Kruskal’s algorithm (in the order you pick them).
+    </span>
+</label>
+<div id="edgesSortedInputs" style="margin-bottom:1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_1_edge" name="p3_10_1_edge" placeholder="e.g. B-C" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_1_weight" name="p3_10_1_weight" placeholder="e.g. 1" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_1" name="p3_11_1">
+        <label for="p3_11_1" style="margin-left:4px;">Select for MCST</label>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_2_edge" name="p3_10_2_edge" placeholder="e.g. A-B" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_2_weight" name="p3_10_2_weight" placeholder="e.g. 2" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_2" name="p3_11_2">
+        <label for="p3_11_2" style="margin-left:4px;">Select for MCST</label>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_3_edge" name="p3_10_3_edge" placeholder="e.g. A-C" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_3_weight" name="p3_10_3_weight" placeholder="e.g. 3" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_3" name="p3_11_3">
+        <label for="p3_11_3" style="margin-left:4px;">Select for MCST</label>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_4_edge" name="p3_10_4_edge" placeholder="e.g. B-D" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_4_weight" name="p3_10_4_weight" placeholder="e.g. 4" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_4" name="p3_11_4">
+        <label for="p3_11_4" style="margin-left:4px;">Select for MCST</label>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_5_edge" name="p3_10_5_edge" placeholder="e.g. C-E" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_5_weight" name="p3_10_5_weight" placeholder="e.g. 5" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_5" name="p3_11_5">
+        <label for="p3_11_5" style="margin-left:4px;">Select for MCST</label>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <input type="text" id="p3_10_6_edge" name="p3_10_6_edge" placeholder="e.g. D-E" style="width:120px;">
+        <span>-</span>
+        <input type="text" id="p3_10_6_weight" name="p3_10_6_weight" placeholder="e.g. 7" style="width:60px;">
+        <span>-</span>
+        <input type="checkbox" id="p3_11_6" name="p3_11_6">
+        <label for="p3_11_6" style="margin-left:4px;">Select for MCST</label>
+    </div>
+</div>
+
+
+            <label for="p3_12">12. Give the total cost (sum of weights) of your MCST for Graph 1.</label>
+            <input type="text" id="p3_12" name="p3_12" placeholder="Example: 12">
+
+            <h3>Graph 2 – Use Prim’s Algorithm</h3>
+            <p>
+                Consider another connected, undirected weighted graph with vertices {P, Q, R, S} and the following edges:
+            </p>
+<pre>
+P - Q  (weight 4)
+P - R  (weight 2)
+Q - R  (weight 1)
+Q - S  (weight 5)
+R - S  (weight 3)
+</pre>
+            <p>Start Prim’s algorithm from vertex <strong>P</strong>.</p>
+
+            <!-- Place this before the Prim’s algorithm questions in Part 3C -->
+<p class="hint" style="background:#f8f9fa; border-left:4px solid #22863a; padding:0.75rem; margin-bottom:1rem;">
+    <strong>How to solve using Prim’s Algorithm:</strong><br>
+    1. Start at the given vertex (here, <b>P</b>).<br>
+    2. At each step, look at all edges connecting the tree to vertices not yet in the tree.<br>
+    3. Choose the edge with the smallest weight that connects to a new vertex.<br>
+    4. Add that edge and vertex to the tree.<br>
+    5. Repeat until all vertices are included.<br>
+    <br>
+    <em>Tip: Always pick the lowest-weight edge that expands your tree, even if it’s not from the most recently added vertex.</em>
+</p>
+
+<label for="p3_13">
+    13. Show the order in which edges are added to the tree when you apply Prim’s algorithm starting at P.
+    <br>
+    <span class="hint" style="color:#555;">
+        <strong>Hint:</strong> Not all edges may be included in your MCST. If there is no edge to add for a step, select "None".
+    </span>
+</label>
+<div id="primOrderInputs" style="margin-bottom:1rem; display: flex; flex-direction: column; gap: 0.5rem;">
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <select name="p3_13_1_edge" id="p3_13_1_edge" style="width:120px;">
+            <option value="">None</option>
+            <option value="P-Q">P-Q (4)</option>
+            <option value="P-R">P-R (2)</option>
+            <option value="Q-R">Q-R (1)</option>
+            <option value="Q-S">Q-S (5)</option>
+            <option value="R-S">R-S (3)</option>
+        </select>
+        <span>-</span>
+        <select id="p3_13_1_order" name="p3_13_1_order" style="width:70px;">
+            <option value="">None</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <select name="p3_13_2_edge" id="p3_13_2_edge" style="width:120px;">
+            <option value="">None</option>
+            <option value="P-Q">P-Q (4)</option>
+            <option value="P-R">P-R (2)</option>
+            <option value="Q-R">Q-R (1)</option>
+            <option value="Q-S">Q-S (5)</option>
+            <option value="R-S">R-S (3)</option>
+        </select>
+        <span>-</span>
+        <select id="p3_13_2_order" name="p3_13_2_order" style="width:70px;">
+            <option value="">None</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <select name="p3_13_3_edge" id="p3_13_3_edge" style="width:120px;">
+            <option value="">None</option>
+            <option value="P-Q">P-Q (4)</option>
+            <option value="P-R">P-R (2)</option>
+            <option value="Q-R">Q-R (1)</option>
+            <option value="Q-S">Q-S (5)</option>
+            <option value="R-S">R-S (3)</option>
+        </select>
+        <span>-</span>
+        <select id="p3_13_3_order" name="p3_13_3_order" style="width:70px;">
+            <option value="">None</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <select name="p3_13_4_edge" id="p3_13_4_edge" style="width:120px;">
+            <option value="">None</option>
+            <option value="P-Q">P-Q (4)</option>
+            <option value="P-R">P-R (2)</option>
+            <option value="Q-R">Q-R (1)</option>
+            <option value="Q-S">Q-S (5)</option>
+            <option value="R-S">R-S (3)</option>
+        </select>
+        <span>-</span>
+        <select id="p3_13_4_order" name="p3_13_4_order" style="width:70px;">
+            <option value="">None</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+        </select>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+        <select name="p3_13_5_edge" id="p3_13_5_edge" style="width:120px;">
+            <option value="">None</option>
+            <option value="P-Q">P-Q (4)</option>
+            <option value="P-R">P-R (2)</option>
+            <option value="Q-R">Q-R (1)</option>
+            <option value="Q-S">Q-S (5)</option>
+            <option value="R-S">R-S (3)</option>
+        </select>
+        <span>-</span>
+        <select id="p3_13_5_order" name="p3_13_5_order" style="width:70px;">
+            <option value="">None</option>
+            <option value="1">1st</option>
+            <option value="2">2nd</option>
+            <option value="3">3rd</option>
+            <option value="4">4th</option>
+            <option value="5">5th</option>
+        </select>
+    </div>
+</div>
+
+            <label for="p3_14">14. Give the total cost (sum of weights) of your MCST for Graph 2.</label>
+            <input type="text" id="p3_14" name="p3_14" placeholder="Example: 6">
+
+        </fieldset>
+<div style="text-align:right; margin-top:1rem;">
+    <button type="button" id="savePart3CBtn" style="background:#22863a;">Save Part 3C</button>
+    <span id="savePart3CStatus" style="margin-left:1rem; color:#22863a; font-weight:500;"></span>
+</div>
+        
+        <div class="nav-buttons">
+            <a href="/activity/dsalgo1/dsalgo1-finals-part2" class="button-link">Back to Part 2</a>
+            <button type="submit">Save Part 3 and Go to Part 4</button>
+        </div>
+    </form>
+</main>
+
+</body>
+</html>

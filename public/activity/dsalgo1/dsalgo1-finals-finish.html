@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>DSALGO1 Finals – Submission Complete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            line-height: 1.6;
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            text-align: center;
+        }
+        h1 {
+            margin-bottom: 0.5rem;
+        }
+        p {
+            margin-top: 0.75rem;
+        }
+        .box {
+            background: #f7f7f7;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+        .highlight {
+            font-weight: 600;
+        }
+        a.button-link {
+            display: inline-block;
+            padding: 0.7rem 1.4rem;
+            background: #0066cc;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 1.5rem;
+        }
+        a.button-link:hover {
+            opacity: 0.9;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: center;
+        }
+        .results-table th {
+            background: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Submission Received</h1>
+    <p>Thank you for completing your <strong>DSALGO1 Finals Examination</strong>.</p>
+
+    <div class="box">
+        <h2>Your Results</h2>
+        <table class="results-table">
+            <tr>
+                <th>Part</th>
+                <th>Score</th>
+                <th>Max</th>
+            </tr>
+            <tr>
+                <td>Part 1: Multiple Choice</td>
+                <td id="score-part1">...</td>
+                <td>30</td>
+            </tr>
+            <tr>
+                <td>Part 2: Matching Type</td>
+                <td id="score-part2">...</td>
+                <td>10</td>
+            </tr>
+            <tr>
+                <td>Part 3: High-Level Tasks</td>
+                <td id="score-part3">...</td>
+                <td>25</td>
+            </tr>
+            <tr>
+                <td>Part 4: Adjacency Matrix</td>
+                <td id="score-part4">...</td>
+                <td id="score-part4-max">50</td>
+            </tr>
+            <tr>
+                <th>Total</th>
+                <th id="score-total">...</th>
+                <th>115</th>
+            </tr>
+        </table>
+        <p style="font-size:0.95em;color:#555;">
+            <em>Note: Part 4 is automatically scaled to a maximum of 50 points. If your score exceeds 50, the extra points are counted as bonus.</em>
+        </p>
+        <p class="highlight">Do not refresh or return to previous pages after this point.</p>
+    </div>
+
+    <div style="margin-bottom:1.2rem;">
+        <strong>Student ID Number:</strong> <span id="studentIDNumberDisplay">[loading...]</span><br>
+        <strong>Name:</strong> <span id="studentNameDisplay">[loading...]</span><br>
+        <strong>Section:</strong> <span id="sectionDisplay">[loading...]</span>
+    </div>
+
+    <a class="button-link" href="/activity/dsalgo1">Return to Homepage</a>
+
+    <p style="color:#22863a;font-weight:500;">
+      Your submission has been received. You may now safely close this page or return to the homepage.
+    </p>
+
+    <script src="/activity/dsalgo1/js/finish.js"></script>
+</body>
+</html>
