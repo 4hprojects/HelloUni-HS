@@ -257,8 +257,8 @@ button:active:not(:disabled) {
 /* Result summary */
 .result-summary {
     margin-top: 0.5rem;
-    font-size: 0.85rem;
-    color: #374151;
+    font-size: 0.95rem;
+    color: #111827;
     padding: 0.5rem;
     background-color: #f8fafc;
     border-radius: 0.5rem;
@@ -273,11 +273,20 @@ button:active:not(:disabled) {
 
 .message {
     min-height: 1.25rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    color: #2563eb;
     font-weight: 500;
     padding: 0.5rem;
     border-radius: 0.5rem;
     background-color: #f8fafc;
+    /* Removed the fixed width to allow flexibility */
+}
+
+.result-row {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 0.5rem;
 }
 
 /* Cell correctness */
