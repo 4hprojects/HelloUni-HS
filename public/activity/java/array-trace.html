@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HelloUniversity – Array Tracing Practice</title>
+    <link rel="stylesheet" href="css/array-trace.css">
+</head>
+<body>
+    <main class="page">
+        <header class="page-header">
+            <h1>Array Tracing Practice Generator</h1>
+            <p>
+                Generate a random 2D array program, then trace the values
+                of each variable step by step.
+            </p>
+        </header>
+
+        <section class="controls" aria-label="Tracing controls">
+            <div class="control-row" style="flex-direction: row; align-items: center; gap: 1rem;">
+                <label for="template-select">Exercise type</label>
+                <select id="template-select">
+                    <!-- Populated by JavaScript -->
+                </select>
+                <span class="section-note" style="margin-left: 1rem;">
+                    Trace the variables, then click "Check answers".
+                </span>
+            </div>
+
+            <div class="control-row buttons-row">
+                <button id="generate-btn" type="button">
+                    Generate new set
+                </button>
+                <button id="check-answers-btn" type="button" disabled>
+                    Check &amp; Submit Answers
+                </button>
+                <button id="show-answers-btn" type="button" disabled>
+                    Show answers
+                </button>
+            </div>
+        </section>
+
+        <!-- Flex container for code and trace table -->
+        <div class="main-flex">
+            <section class="code-section">
+                <h2>Program</h2>
+                <p class="section-note">
+                    Read the code and trace the variables in the table below.
+                </p>
+                <pre class="code-block" oncontextmenu="return false;">
+<code id="code-snippet">
+// Click "Generate new set" to start.
+</code>
+                </pre>
+            </section>
+
+            <section class="trace-section">
+                <h2>Trace table</h2>
+                <p id="trace-description" class="section-note">
+                    After generating a set, fill in each cell based on the current
+                    values of the variables at every step of the loops.
+                </p>
+                <div id="table-container" class="table-container">
+                    <!-- Table injected here -->
+                </div>
+
+                <div id="result-summary" class="result-summary">
+                    <!-- Final totals / pass count summary -->
+                </div>
+            </section>
+        </div>
+
+        <section class="feedback-section">
+            <p id="message" class="message"></p>
+        </section>
+    </main>
+
+    <!-- User Info Modal -->
+    <div id="tracing-modal" style="display: none;">
+        <form id="tracing-form" class="modal-form" autocomplete="off" novalidate>
+            <h2>Enter Your Details</h2>
+            <label>
+                Student ID Number
+                <input type="text" name="studentIDNumber" required autocomplete="off" />
+            </label>
+            <label>
+                Email
+                <input type="email" name="email" required autocomplete="off" />
+            </label>
+            <label>
+                Full Name
+                <input type="text" name="fullname" required autocomplete="off" />
+            </label>
+            <button id="start-btn" type="submit">Start</button>
+        </form>
+    </div>
+
+    <script src="js/array-trace.js"></script>
+</body>
+</html>

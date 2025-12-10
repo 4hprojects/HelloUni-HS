@@ -1,0 +1,430 @@
+/* Layout */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+    background-color: #f5f7fb;
+    color: #111827;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.page {
+    max-width: none;
+    width: 100%;
+    height: 100vh;
+    margin: 0;
+    padding: 1.5rem 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.page-header {
+    margin-bottom: 1rem;
+    flex-shrink: 0;
+}
+
+.page-header h1 {
+    margin: 0 0 0.5rem;
+    font-size: 1.5rem;
+}
+
+.page-header p {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.9rem;
+}
+
+/* Controls */
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: #ffffff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    flex-shrink: 0;
+}
+
+.control-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 200px;
+}
+
+.control-row label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+#template-select {
+    padding: 0.4rem 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    font-size: 0.9rem;
+    background-color: #f9fafb;
+}
+
+.buttons-row {
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 0.5rem;
+}
+
+/* Buttons */
+
+button {
+    cursor: pointer;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background-color: #2563eb;
+    color: #ffffff;
+    transition: background-color 0.15s ease, transform 0.1s ease,
+        box-shadow 0.1s ease;
+    white-space: nowrap;
+}
+
+button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    background-color: #9ca3af;
+}
+
+button:hover:not(:disabled) {
+    background-color: #1d4ed8;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+}
+
+button:active:not(:disabled) {
+    transform: translateY(1px);
+    box-shadow: none;
+}
+
+/* Main flex container for code and trace table */
+.main-flex {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    flex: 1;
+    min-height: 70%;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.code-section,
+.trace-section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.code-section h2,
+.trace-section h2 {
+    margin: 0 0 0.25rem;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.section-note {
+    margin: 0 0 0.5rem;
+    font-size: 0.8rem;
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.code-section {
+    flex: 0 0 33%;
+    min-width: 0;
+}
+
+.trace-section {
+    flex: 0 0 77%;
+    min-width: 0;
+}
+
+/* Code block */
+.code-block {
+    flex: 1;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    background-color: #111827;
+    color: #e5e7eb;
+    border-radius: 0.75rem;
+    overflow: auto;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    user-select: none;      /* <-- Allow selection */
+    pointer-events: auto;   /* <-- Allow interaction */
+    min-height: 420px;      /* <-- Increase height as needed */
+}
+
+/* Trace table container */
+.table-container {
+    flex: 1;
+    overflow: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background-color: #ffffff;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    min-height: 200px;
+}
+
+/* Trace table */
+.trace-table {
+    width: auto;              /* Don't stretch table to full container width */
+    max-width: 100%;          /* Prevent overflow */
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin-left: 0;   /* Left align the table */
+    margin-right: 0;
+}
+
+.trace-table thead {
+    background-color: #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.trace-table th,
+.trace-table td {
+    min-width: 108px;          /* Even smaller minimum width */
+    max-width: 108px;          /* Even smaller maximum width */
+    padding: 0.05rem 0.08rem; /* Less padding */
+    font-size: 0.6rem;        /* Smaller text */
+    border-bottom: 1px solid #e5e7eb;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.trace-table th {
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    background-color: #e5e7eb;
+}
+
+.trace-table td {
+    background-color: #ffffff;
+}
+
+.trace-table tbody tr:nth-child(even) td {
+    background-color: #f9fafb;
+}
+
+.trace-table tbody tr:hover td {
+    background-color: #e0e7ff;
+    transition: background 0.15s;
+}
+
+/* Inputs inside table */
+.trace-input {
+    min-width: 0;          /* Smaller input */
+    width: 100%;  
+    font-size: 0.6rem;
+    padding: 0.05rem 0.08rem;
+    border-radius: 0.35rem;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    text-align: center;
+}
+
+.trace-input:focus {
+    outline: 2px solid #2563eb;
+    outline-offset: 0;
+    background-color: #ffffff;
+}
+
+/* Result summary */
+.result-summary {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #374151;
+    padding: 0.5rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+}
+
+/* Feedback section */
+.feedback-section {
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+}
+
+.message {
+    min-height: 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: #f8fafc;
+}
+
+/* Cell correctness */
+.cell-correct {
+    background-color: #dcfce7 !important;
+    border-color: #16a34a !important;
+}
+
+.cell-incorrect {
+    background-color: #fee2e2 !important;
+    border-color: #dc2626 !important;
+}
+
+/* Watermark for code section */
+.code-section {
+    position: relative;
+}
+
+.code-section::after {
+    content: "HelloUniversity – No Screenshots";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    font-size: 2rem;
+    color: rgba(200, 0, 0, 0.08);
+    pointer-events: none;
+    user-select: none;
+    z-index: 2;
+    white-space: nowrap;
+}
+
+/* Modal overlay and form styling */
+#tracing-modal {
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0; right: 0; bottom: 0;
+    background: rgba(30, 41, 59, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.modal-form {
+    background: #fff;
+    padding: 1.5rem 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.modal-form h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+    text-align: center;
+    color: #111827;
+}
+
+.modal-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #374151;
+    gap: 0.25rem;
+}
+
+.modal-form input {
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid #d1d5db;
+    font-size: 1rem;
+    background: #f9fafb;
+    transition: border-color 0.15s;
+}
+
+.modal-form input:focus {
+    outline: 2px solid #2563eb;
+    border-color: transparent;
+}
+
+.modal-form button[type="submit"] {
+    margin-top: 0.5rem;
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.6rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.modal-form button[type="submit"]:hover {
+    background: #1d4ed8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .main-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .code-section,
+    .trace-section {
+        flex: 0 0 auto;
+        height: 50%;
+    }
+    
+    .controls {
+        flex-direction: column;
+    }
+    
+    .buttons-row {
+        flex-wrap: wrap;
+    }
+    
+    button {
+        flex: 1;
+        min-width: 120px;
+    }
+}
+
+@media (max-height: 700px) {
+    .page {
+        padding: 1rem 0.75rem 0.5rem;
+    }
+    
+    .code-block,
+    .table-container {
+        font-size: 0.7rem;
+    }
+    
+    .trace-table th,
+    .trace-table td {
+        padding: 0.15rem 0.2rem;
+    }
+    
+    .trace-input {
+        padding: 0.1rem 0.15rem;
+    }
+}
