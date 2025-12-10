@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>DSALGO1 Finals - Submission Complete</title>
+    <title>DSALGO1 Finals - Results</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/finish.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,7 +15,7 @@
                 <i class="fas fa-check-circle"></i>
             </div>
             <h1>Submission Received</h1>
-            <p class="subtitle">Thank you for completing your <strong>DSALGO1 Finals Examination</strong>.</p>
+            <p class="subtitle">Your <strong>DSALGO1 Finals Examination</strong> has been successfully graded.</p>
         </div>
 
         <!-- Student Info Card -->
@@ -44,69 +44,105 @@
         <!-- Results Section -->
         <div class="results-card">
             <div class="results-header">
-                <h2><i class="fas fa-chart-bar"></i> Your Results</h2>
+                <h2><i class="fas fa-chart-bar"></i> Detailed Results</h2>
                 <div class="total-score-badge">
-                    <span class="total-label">TOTAL</span>
-                    <span id="score-total" class="total-value">...</span>
-                    <span class="total-max">/ 115</span>
+                    <span class="total-label">FINAL SCORE</span>
+                    <div class="total-score-container">
+                        <span id="score-total" class="total-value">...</span>
+                        <span class="total-max">/ 115</span>
+                    </div>
                 </div>
             </div>
 
-            <div class="table-container">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th>Part</th>
-                            <th>Description</th>
-                            <th>Your Score</th>
-                            <th>Max Score</th>
-                            <th>Performance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="part-number">Part 1</td>
-                            <td>Multiple Choice Questions</td>
-                            <td id="score-part1" class="score-value">...</td>
-                            <td class="max-score">30</td>
-                            <td id="performance-part1" class="performance-indicator">-</td>
-                        </tr>
-                        <tr>
-                            <td class="part-number">Part 2</td>
-                            <td>Matching Type</td>
-                            <td id="score-part2" class="score-value">...</td>
-                            <td class="max-score">10</td>
-                            <td id="performance-part2" class="performance-indicator">-</td>
-                        </tr>
-                        <tr>
-                            <td class="part-number">Part 3</td>
-                            <td>High-Level Tasks</td>
-                            <td id="score-part3" class="score-value">...</td>
-                            <td class="max-score">25</td>
-                            <td id="performance-part3" class="performance-indicator">-</td>
-                        </tr>
-                        <tr class="part4-row">
-                            <td class="part-number">Part 4</td>
-                            <td>Adjacency Matrix
-                                <span class="part4-note">(Scaled to 50 points)</span>
-                            </td>
-                            <td id="score-part4" class="score-value">...</td>
-                            <td class="max-score">50</td>
-                            <td id="performance-part4" class="performance-indicator">-</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <!-- Score Breakdown -->
+            <div class="score-breakdown">
+                <div class="breakdown-header">
+                    <h3><i class="fas fa-list-alt"></i> Score Breakdown</h3>
+                </div>
+                <div class="breakdown-grid">
+                    <!-- Part 1 -->
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="part-number">Part 1</span>
+                            <span class="part-title">Multiple Choice</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <span id="score-part1" class="score-display">...</span>
+                            <span class="score-max">/ 30</span>
+                        </div>
+                        <div id="performance-part1" class="performance-indicator">-</div>
+                    </div>
+                    
+                    <!-- Part 2 -->
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="part-number">Part 2</span>
+                            <span class="part-title">Matching Type</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <span id="score-part2" class="score-display">...</span>
+                            <span class="score-max">/ 10</span>
+                        </div>
+                        <div id="performance-part2" class="performance-indicator">-</div>
+                    </div>
+                    
+                    <!-- Part 3 -->
+                    <div class="breakdown-item">
+                        <div class="breakdown-label">
+                            <span class="part-number">Part 3</span>
+                            <span class="part-title">High-Level Tasks</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <span id="score-part3" class="score-display">...</span>
+                            <span class="score-max">/ 25</span>
+                        </div>
+                        <div id="performance-part3" class="performance-indicator">-</div>
+                    </div>
+                    
+                    <!-- Part 4 -->
+                    <div class="breakdown-item part4-item">
+                        <div class="breakdown-label">
+                            <span class="part-number">Part 4</span>
+                            <span class="part-title">Adjacency Matrix</span>
+                            <span class="part-subtitle">(Scaled to 50 points)</span>
+                        </div>
+                        <div class="breakdown-score">
+                            <span id="score-part4" class="score-display">...</span>
+                            <span class="score-max">/ 50</span>
+                        </div>
+                        <div id="performance-part4" class="performance-indicator">-</div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Part 4 Details -->
             <div class="part4-details" id="part4-details">
-                <!-- Part 4 details will be populated by JavaScript -->
+                <!-- Details will be populated by JavaScript -->
             </div>
 
+            <!-- Bonus Note -->
             <div class="bonus-note" id="bonus-note" style="display: none;">
                 <i class="fas fa-star"></i>
                 <span>Bonus points earned! Your score exceeds the maximum.</span>
             </div>
 
+            <!-- Score Summary -->
+            <div class="score-summary">
+                <div class="summary-item">
+                    <span class="summary-label">Total Raw Points:</span>
+                    <span id="raw-total" class="summary-value">...</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Final Score:</span>
+                    <span id="final-score" class="summary-value highlight">...</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Percentage:</span>
+                    <span id="percentage-score" class="summary-value">...</span>
+                </div>
+            </div>
+
+            <!-- Warning Message -->
             <div class="warning-message">
                 <i class="fas fa-exclamation-triangle"></i>
                 <p>Do not refresh or return to previous pages after this point.</p>
