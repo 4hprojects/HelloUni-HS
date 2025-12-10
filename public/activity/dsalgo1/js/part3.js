@@ -428,8 +428,8 @@ function createEdge(fromId, toId) {
     // Add arrow
     const arrow = document.createElement('div');
     arrow.className = 'graph-edge-arrow';
-    arrow.style.left = `${length - 8}px`;
-    arrow.style.top = '-4px';
+    arrow.style.left = `${length - 18}px`; // Offset for larger arrowhead
+    arrow.style.top = '-10px'; // Center vertically
     edgeEl.appendChild(arrow);
     
     document.querySelector('.graph-canvas').appendChild(edgeEl);
@@ -461,7 +461,8 @@ function updateEdgesForNode(nodeId) {
                 
                 const arrow = edge.element.querySelector('.graph-edge-arrow');
                 if (arrow) {
-                    arrow.style.left = `${length - 8}px`;
+                    arrow.style.left = `${length - 18}px`;
+                    arrow.style.top = '-10px';
                 }
             }
         }
