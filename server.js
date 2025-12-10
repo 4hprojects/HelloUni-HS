@@ -62,6 +62,9 @@ const activitySubmit = require('./routes/activitySubmit'); // added 27 Nov 2025
 const javaLeaderboardApi = require('./routes/admin_dashboard/javaLeaderboardApi'); // added 27 Dec 2025
 const dsalgoFinalExamAPI = require('./routes/dsalgo1/dsalgofinalExamAPI');
 app.use('/api/activity/dsalgo1-finals', dsalgoFinalExamAPI);
+const arrayTraceRoutes = require('./routes/activity/arrayTraceRoutes'); //added 10 Dec 2025
+
+app.use('/api/array-trace', arrayTraceRoutes); //added 10 Dec 2025
 
 app.use('/api/activity', activitySubmit); // added 27 Nov 2025
 app.use('/api/activity', activityJsonApi); // added 27 Nov 2025
