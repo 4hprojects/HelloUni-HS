@@ -397,7 +397,7 @@ h3 {
     font-weight: 600;
     cursor: move;
     user-select: none;
-    z-index: 10;
+    z-index: 10; /* Node below edge and arrowhead */
 }
 
 .graph-edge {
@@ -405,7 +405,7 @@ h3 {
     background: #999;
     height: 2px;
     transform-origin: 0 0;
-    z-index: 1;
+    z-index: 20; /* Make edge above node */
 }
 
 .graph-edge-arrow {
@@ -413,8 +413,10 @@ h3 {
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 5px 0 5px 8px;
-    border-color: transparent transparent transparent #999;
+    border-width: 10px 0 10px 18px;
+    border-color: transparent transparent transparent #059669;
+    filter: drop-shadow(0 0 2px #059669);
+    z-index: 21; /* Make arrowhead above edge and node */
 }
 
 /* ===== MCST INPUTS ===== */
