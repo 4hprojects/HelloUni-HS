@@ -309,12 +309,22 @@
                     </div>
                 </div>
 
-                <!-- Graph Builder -->
-                <div class="graph-builder-container">
-                    <h3>Graph Builder (Optional)</h3>
-                    <p class="hint">Click two nodes to add a directed edge (arrow). Click on an edge to remove it.</p>
-                    <div class="graph-canvas"></div>
-                </div>
+        <!-- Graph Builder (Optional) -->
+        <div class="graph-builder-container" aria-labelledby="graph-builder-title">
+            <h3 id="graph-builder-title">
+                <i class="fas fa-project-diagram" aria-hidden="true"></i> Interactive Graph Builder <span style="font-size:0.95em; color:#888;">(Optional)</span>
+            </h3>
+            <p class="hint">
+                <strong>How to use:</strong> 
+                <ul style="margin:0 0 0 1.2em; padding:0; font-size:0.97em;">
+                    <li>Click <strong>one node</strong>, then another to add a <b>directed edge</b> (arrow).</li>
+                    <li>Click on an <strong>existing edge</strong> to remove it.</li>
+                    <li>Drag nodes to reposition them.</li>
+                    <li><span style="color:#475569;">Tip: Keyboard navigation is supported for accessibility.</span></li>
+                </ul>
+            </p>
+            <div class="graph-canvas" tabindex="0" aria-label="Interactive graph canvas. Use mouse or keyboard to add or remove edges."></div>
+        </div>
 
                 <!-- Question 7: BFS Visit Order -->
                 <div class="input-group">
