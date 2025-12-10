@@ -12,6 +12,9 @@ const PERFORMANCE_THRESHOLDS = {
     poor: 0         // Below 60%
 };
 
+// Debug mode
+const DEBUG = true;
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     // Prevent access if no student ID in sessionStorage
@@ -31,9 +34,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Show loading overlay
     loadingOverlay.style.display = 'flex';
 
-    // Load scores and populate the page
-    populateScores();
-    
     // Set submission time
     const now = new Date();
     document.getElementById('submissionTimeDisplay').textContent = 
@@ -46,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
             second: '2-digit'
         });
 
+    // Load scores and populate the page
+    populateScores();
+    
     // Event Listeners
     printResultsBtn.addEventListener('click', handlePrintResults);
     downloadResultsBtn.addEventListener('click', handleDownloadResults);
@@ -64,6 +67,13 @@ function showAlert(message, type = 'warning') {
     setTimeout(() => alertDiv.remove(), 5000);
 }
 
+// Debug logging function
+function debugLog(message, data = null) {
+    if (DEBUG) {
+        console.log(`[DEBUG] ${message}`, data || '');
+    }
+}
+
 // Populate scores from server
 async function populateScores() {
     const studentID = sessionStorage.getItem('studentIDNumber');
@@ -75,6 +85,8 @@ async function populateScores() {
     }
 
     try {
+        debugLog("Fetching scores for student:", studentID);
+        
         const res = await fetch('/api/activity/dsalgo1-finals/info', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -90,10 +102,11 @@ async function populateScores() {
         }
 
         const data = await res.json();
+        debugLog("Server response:", data);
         
         if (data.success && data.data) {
             displayStudentInfo(data.data);
-            displayScores(data.data.answers || {});
+            displayScores(data.data);
             hideLoading();
         } else {
             throw new Error(data.message || 'Failed to load results');
@@ -118,61 +131,187 @@ function displayStudentInfo(data) {
 }
 
 // Display scores and calculate performance
-function displayScores(answers) {
-    const scores = {
-        part1: parseInt(answers['score_part1']) || 0,
-        part2: parseInt(answers['score_part2']) || 0,
-        part3: parseInt(answers['score_part3']) || 0,
-        part4Raw: parseInt(answers['score_part4_raw']) || 0,
-        part4Max: parseInt(answers['score_part4_max']) || 0,
-        part4Scaled: parseInt(answers['score']) || 0
-    };
-
-    // Display individual scores
-    document.getElementById('score-part1').textContent = scores.part1;
-    document.getElementById('score-part2').textContent = scores.part2;
-    document.getElementById('score-part3').textContent = scores.part3;
+function displayScores(data) {
+    debugLog("Display scores - Full data:", data);
     
-    // Display Part 4 score
-    let part4Display = `${scores.part4Scaled} / 50`;
-    if (scores.part4Raw > 0) {
-        part4Display += ` (Raw: ${scores.part4Raw} / ${scores.part4Max})`;
+    // Check different possible locations for scores
+    const answers = data.answers || {};
+    const scoresFromAnswers = data.scores || {};
+    
+    debugLog("Answers object:", answers);
+    debugLog("Scores object:", scoresFromAnswers);
+    
+    // Try multiple possible key names for Part 4 scores
+    let part4Scaled = 0;
+    let part4Raw = 0;
+    let part4Max = 50; // Default maximum
+    
+    // Try to find Part 4 scores in different locations
+    const possibleKeys = [
+        'score', 'score_part4', 'part4_score', 'adjacency_matrix_score',
+        'scaled_score', 'final_score', 'total_score'
+    ];
+    
+    for (const key of possibleKeys) {
+        if (answers[key] !== undefined) {
+            debugLog(`Found ${key}:`, answers[key]);
+            part4Scaled = parseInt(answers[key]) || 0;
+            break;
+        }
+        if (scoresFromAnswers[key] !== undefined) {
+            debugLog(`Found ${key} in scores:`, scoresFromAnswers[key]);
+            part4Scaled = parseInt(scoresFromAnswers[key]) || 0;
+            break;
+        }
     }
-    document.getElementById('score-part4').textContent = part4Display;
-
+    
+    // Look for raw score specifically
+    const rawScoreKeys = ['score_part4_raw', 'raw_score', 'adjacency_raw'];
+    for (const key of rawScoreKeys) {
+        if (answers[key] !== undefined) {
+            part4Raw = parseInt(answers[key]) || 0;
+            debugLog(`Found raw score ${key}:`, part4Raw);
+            break;
+        }
+    }
+    
+    // Look for max score
+    const maxScoreKeys = ['score_part4_max', 'max_score', 'adjacency_max'];
+    for (const key of maxScoreKeys) {
+        if (answers[key] !== undefined) {
+            part4Max = parseInt(answers[key]) || 50;
+            debugLog(`Found max score ${key}:`, part4Max);
+            break;
+        }
+    }
+    
+    // If no raw score found but we have scaled, try to reverse calculate
+    if (part4Raw === 0 && part4Scaled > 0) {
+        part4Raw = Math.round((part4Scaled / 50) * part4Max);
+        debugLog("Calculated raw score from scaled:", part4Raw);
+    }
+    
+    // Get other part scores with fallbacks
+    const scores = {
+        part1: parseInt(answers['score_part1']) || 
+               parseInt(scoresFromAnswers['part1']) || 
+               parseInt(scoresFromAnswers['score_part1']) || 0,
+        part2: parseInt(answers['score_part2']) || 
+               parseInt(scoresFromAnswers['part2']) || 
+               parseInt(scoresFromAnswers['score_part2']) || 0,
+        part3: parseInt(answers['score_part3']) || 
+               parseInt(scoresFromAnswers['part3']) || 
+               parseInt(scoresFromAnswers['score_part3']) || 0,
+        part4Raw: part4Raw,
+        part4Max: part4Max,
+        part4Scaled: part4Scaled
+    };
+    
+    debugLog("Parsed scores:", scores);
+    
+    // Display individual scores
+    animateScoreDisplay('score-part1', scores.part1);
+    animateScoreDisplay('score-part2', scores.part2);
+    animateScoreDisplay('score-part3', scores.part3);
+    animateScoreDisplay('score-part4', scores.part4Scaled);
+    
     // Display Part 4 details
-    if (scores.part4Raw > 0) {
+    if (scores.part4Scaled > 0 || scores.part4Raw > 0) {
         const part4Details = document.getElementById('part4-details');
         part4Details.innerHTML = `
-            <h3><i class="fas fa-info-circle"></i> Part 4 Details</h3>
-            <p>Raw score: <strong>${scores.part4Raw} / ${scores.part4Max}</strong></p>
-            <p>Scaled to: <strong>${scores.part4Scaled} / 50</strong> (${((scores.part4Scaled/50)*100).toFixed(1)}%)</p>
-            <p>Extra points are counted as bonus if the raw score exceeds 50.</p>
+            <h3><i class="fas fa-info-circle"></i> Part 4 - Adjacency Matrix Details</h3>
+            <p><strong>Scaled Score:</strong> ${scores.part4Scaled} / 50</p>
+            ${scores.part4Raw > 0 ? `
+                <p><strong>Raw Score:</strong> ${scores.part4Raw} / ${scores.part4Max}</p>
+                <p><strong>Scaling Factor:</strong> ${(scores.part4Scaled / scores.part4Raw * 50).toFixed(2)}x</p>
+            ` : ''}
+            <p><em>Note: Raw scores are scaled to fit the 50-point maximum for this section.</em></p>
         `;
+        part4Details.style.display = 'block';
+    } else {
+        // Hide part4 details if no score
+        document.getElementById('part4-details').style.display = 'none';
     }
-
-    // Calculate total
-    let total = scores.part1 + scores.part2 + scores.part3 + scores.part4Scaled;
-    document.getElementById('score-total').textContent = total;
-
+    
+    // Calculate totals
+    const rawTotal = scores.part1 + scores.part2 + scores.part3 + scores.part4Raw;
+    const finalTotal = scores.part1 + scores.part2 + scores.part3 + scores.part4Scaled;
+    const percentage = ((finalTotal / 115) * 100).toFixed(1);
+    
+    debugLog("Totals - Raw:", rawTotal, "Final:", finalTotal, "Percentage:", percentage);
+    
+    // Animate total score display
+    animateTotalScore(finalTotal);
+    
+    // Display score summary
+    document.getElementById('raw-total').textContent = `${rawTotal} points`;
+    document.getElementById('final-score').textContent = `${finalTotal} / 115`;
+    document.getElementById('percentage-score').textContent = `${percentage}%`;
+    
     // Show bonus note if total > 115
-    if (total > 115) {
-        const bonusPoints = total - 115;
+    if (finalTotal > 115) {
+        const bonusPoints = finalTotal - 115;
         bonusNote.innerHTML = `
-            <i class="fas fa-star"></i>
-            <span>Excellent! You earned <strong>${bonusPoints.toFixed(2)} bonus points</strong> beyond the maximum score!</span>
+            <i class="fas fa-crown"></i>
+            <span>Outstanding Performance! You earned <strong>${bonusPoints.toFixed(1)} bonus points</strong> (${(bonusPoints/115*100).toFixed(1)}%) beyond the maximum score!</span>
         `;
         bonusNote.style.display = 'flex';
         
         // Animate the total score
         document.getElementById('score-total').classList.add('bonus-animation');
+    } else {
+        bonusNote.style.display = 'none';
     }
-
+    
     // Calculate and display performance indicators
     calculatePerformance(scores);
+}
+
+// Animate score display
+function animateScoreDisplay(elementId, score) {
+    const element = document.getElementById(elementId);
+    if (!element) {
+        console.error(`Element not found: ${elementId}`);
+        return;
+    }
     
-    // Add data labels for responsive tables
-    addDataLabels();
+    element.textContent = '0';
+    element.classList.add('score-reveal');
+    
+    let current = 0;
+    const increment = Math.max(score / 30, 0.1); // Adjust speed, minimum increment
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= score) {
+            current = score;
+            clearInterval(timer);
+            element.classList.remove('score-reveal');
+        }
+        element.textContent = Math.floor(current);
+    }, 20);
+}
+
+// Animate total score display
+function animateTotalScore(finalScore) {
+    const element = document.getElementById('score-total');
+    if (!element) {
+        console.error('Total score element not found');
+        return;
+    }
+    
+    element.textContent = '0';
+    
+    let current = 0;
+    const increment = Math.max(finalScore / 40, 0.1); // Adjust speed
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= finalScore) {
+            current = finalScore;
+            clearInterval(timer);
+            element.classList.add('score-reveal');
+        }
+        element.textContent = Math.floor(current);
+    }, 20);
 }
 
 // Calculate performance indicators
@@ -183,19 +322,23 @@ function calculatePerformance(scores) {
         part3: 25,
         part4: 50
     };
-
-    const performances = {
-        part1: scores.part1 / maxScores.part1,
-        part2: scores.part2 / maxScores.part2,
-        part3: scores.part3 / maxScores.part3,
-        part4: scores.part4Scaled / maxScores.part4
-    };
-
-    Object.entries(performances).forEach(([part, percentage]) => {
+    
+    const parts = ['part1', 'part2', 'part3', 'part4'];
+    
+    parts.forEach(part => {
         const element = document.getElementById(`performance-${part}`);
+        if (!element) {
+            console.warn(`Performance element not found: performance-${part}`);
+            return;
+        }
+        
+        const score = part === 'part4' ? scores.part4Scaled : scores[part];
+        const maxScore = maxScores[part];
+        const percentage = score / maxScore;
+        
         let performanceClass = '';
         let performanceText = '';
-
+        
         if (percentage >= PERFORMANCE_THRESHOLDS.excellent) {
             performanceClass = 'performance-excellent';
             performanceText = 'Excellent';
@@ -209,22 +352,10 @@ function calculatePerformance(scores) {
             performanceClass = 'performance-poor';
             performanceText = 'Needs Improvement';
         }
-
+        
         element.className = `performance-indicator ${performanceClass}`;
-        element.textContent = `${(percentage * 100).toFixed(1)}% - ${performanceText}`;
-    });
-}
-
-// Add data labels for responsive tables
-function addDataLabels() {
-    const cells = document.querySelectorAll('.results-table td');
-    const headers = document.querySelectorAll('.results-table th');
-    
-    cells.forEach((cell, index) => {
-        const headerIndex = index % headers.length;
-        if (headers[headerIndex]) {
-            cell.setAttribute('data-label', headers[headerIndex].textContent);
-        }
+        element.textContent = `${performanceText} (${(percentage * 100).toFixed(1)}%)`;
+        element.title = `Score: ${score}/${maxScore} - ${performanceText} Performance`;
     });
 }
 
@@ -307,3 +438,44 @@ alertStyles.textContent = `
 `;
 
 document.head.appendChild(alertStyles);
+
+// Debug function to check what's actually being returned from server
+async function testServerResponse() {
+    const studentID = sessionStorage.getItem('studentIDNumber');
+    const examID = "dsalgo1-finals";
+    
+    console.log("=== TESTING SERVER RESPONSE ===");
+    console.log("Student ID:", studentID);
+    console.log("Exam ID:", examID);
+    
+    try {
+        const res = await fetch('/api/activity/dsalgo1-finals/info', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'load',
+                examID,
+                studentIDNumber: studentID
+            })
+        });
+        
+        const data = await res.json();
+        console.log("Full server response:", data);
+        console.log("Data structure:", JSON.stringify(data, null, 2));
+        
+        if (data.data && data.data.answers) {
+            console.log("Keys in answers:", Object.keys(data.data.answers));
+            console.log("All answers:", data.data.answers);
+        }
+        
+        return data;
+    } catch (error) {
+        console.error("Test failed:", error);
+        return null;
+    }
+}
+
+// Uncomment to test server response
+// document.addEventListener('DOMContentLoaded', function() {
+//     setTimeout(testServerResponse, 1000);
+// });
