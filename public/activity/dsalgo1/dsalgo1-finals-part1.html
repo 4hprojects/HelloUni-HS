@@ -665,8 +665,405 @@
                     </div>
                 </div>
 
-                <!-- Questions 12-20 would continue here with same structure -->
-                <!-- For brevity, I'm showing just one more example -->
+                <!-- Question 12 -->
+                <div class="question" id="q12" data-question="12">
+                    <div class="question-header">
+                        <span class="question-number">12</span>
+                        <p class="question-text">When does a vertex enter the <strong>visited set</strong> in BFS?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q12" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    When you finish processing all of its neighbours.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    When it is removed from the queue.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    As soon as it is discovered as a neighbour.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q12" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    Only after all vertices at the same level are processed.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 13 -->
+                <div class="question" id="q13" data-question="13">
+                    <div class="question-header">
+                        <span class="question-number">13</span>
+                        <p class="question-text">In an <strong>undirected</strong> graph, if there is an edge A–B, which moves are allowed?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q13" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    From A to B only.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    From B to A only.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    From A to B and from B to A.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q13" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    No move is allowed until a weight is given.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 14 -->
+                <div class="question" id="q14" data-question="14">
+                    <div class="question-header">
+                        <span class="question-number">14</span>
+                        <p class="question-text">In a <strong>directed</strong> graph, what does the edge (A, B) mean for BFS?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q14" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    BFS can move from B to A only.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    BFS can move from A to B only.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    BFS can move both A → B and B → A.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q14" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    BFS cannot use this edge.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 15 -->
+                <div class="question" id="q15" data-question="15">
+                    <div class="question-header">
+                        <span class="question-number">15</span>
+                        <p class="question-text">Why does the <strong>order of neighbours</strong> in the adjacency list matter for BFS?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q15" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    It changes which edges exist in the graph.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q15" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    It changes the BFS visit order while keeping the graph the same.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q15" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    It changes the number of vertices in the graph.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q15" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    It has no effect on BFS.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 16 -->
+                <div class="question" id="q16" data-question="16">
+                    <div class="question-header">
+                        <span class="question-number">16</span>
+                        <p class="question-text">What does BFS use the visit order for?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q16" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    To know which vertex to delete next.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q16" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    To know the order in which vertices were processed.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q16" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    To store edge weights.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q16" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    To detect whether the graph is connected.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 17 -->
+                <div class="question" id="q17" data-question="17">
+                    <div class="question-header">
+                        <span class="question-number">17</span>
+                        <p class="question-text">In a directed graph, why can some vertices be unreachable from the starting vertex?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q17" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    Because BFS ignores edges with weights.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q17" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    Because BFS cannot move against the direction of arrows.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q17" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    Because BFS always skips vertices with in-degree greater than one.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q17" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    Because BFS only works for undirected graphs.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 18 -->
+                <div class="question" id="q18" data-question="18">
+                    <div class="question-header">
+                        <span class="question-number">18</span>
+                        <p class="question-text">What does the <strong>distance level</strong> of a vertex in BFS represent?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q18" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    The number of cycles in the graph.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q18" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    The number of edges on the shortest path from the start vertex.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q18" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    The degree of the vertex.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q18" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    The number of neighbours it has.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 19 -->
+                <div class="question" id="q19" data-question="19">
+                    <div class="question-header">
+                        <span class="question-number">19</span>
+                        <p class="question-text">When does BFS stop?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q19" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    When all vertices have at least one incoming edge.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q19" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    When every vertex has been visited or no new vertex can be discovered.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q19" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    When the queue becomes full.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q19" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    When the degree of the current vertex is zero.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
 
                 <!-- Question 20 -->
                 <div class="question" id="q20" data-question="20">
@@ -774,6 +1171,406 @@
                                 <span class="option-text">
                                     <span class="option-key">D.</span>
                                     A tree that uses only the edges with maximum weight.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 22 -->
+                <div class="question" id="q22" data-question="22">
+                    <div class="question-header">
+                        <span class="question-number">22</span>
+                        <p class="question-text">How many edges does a spanning tree of a connected graph with V vertices have?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q22" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    V − 2
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q22" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    V − 1
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q22" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    V
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q22" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    2V
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 23 -->
+                <div class="question" id="q23" data-question="23">
+                    <div class="question-header">
+                        <span class="question-number">23</span>
+                        <p class="question-text">What is a Minimum Cost Spanning Tree (MCST)?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q23" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    Any spanning tree that uses the largest number of edges.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q23" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    A spanning tree that has at least one cycle.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q23" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    A spanning tree with the smallest possible total edge weight.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q23" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    A spanning tree that connects only a subset of vertices.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 24 -->
+                <div class="question" id="q24" data-question="24">
+                    <div class="question-header">
+                        <span class="question-number">24</span>
+                        <p class="question-text">Which step is part of <strong>Kruskal's algorithm</strong> for finding an MCST?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q24" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    Start from a chosen vertex and always expand from it.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q24" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    Sort all edges by weight and pick the smallest edge that does not form a cycle.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q24" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    Use a queue to process vertices in layers.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q24" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    Always pick the edge farthest from the start vertex.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 25 -->
+                <div class="question" id="q25" data-question="25">
+                    <div class="question-header">
+                        <span class="question-number">25</span>
+                        <p class="question-text">Which statement describes <strong>Prim's algorithm</strong>?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q25" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    It builds the MCST by adding one vertex at a time, starting from any vertex.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q25" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    It removes the highest-cost edges until a tree remains.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q25" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    It always visits vertices in alphabetical order.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q25" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    It first builds an adjacency matrix and then deletes rows.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 26 -->
+                <div class="question" id="q26" data-question="26">
+                    <div class="question-header">
+                        <span class="question-number">26</span>
+                        <p class="question-text">When building an MCST, why must cycles be avoided?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q26" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    Cycles increase the number of vertices.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q26" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    Cycles make the spanning tree disconnected.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q26" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    Cycles mean some edges are not needed for connectivity.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q26" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    Cycles are required only in directed graphs.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 27 -->
+                <div class="question" id="q27" data-question="27">
+                    <div class="question-header">
+                        <span class="question-number">27</span>
+                        <p class="question-text">In Kruskal's algorithm, when do you <strong>skip</strong> an edge while building the MCST?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q27" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    When the edge has the smallest weight.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    When the edge connects two vertices that are already connected in the current tree.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    When the edge is incident to a vertex with degree one.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q27" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    When the edge appears last in the sorted list.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 28 -->
+                <div class="question" id="q28" data-question="28">
+                    <div class="question-header">
+                        <span class="question-number">28</span>
+                        <p class="question-text">For graphs with unique edge weights, what can you say about the MCST produced by Kruskal and Prim?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q28" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    They always produce MCSTs with different total cost.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    They always produce MCSTs with the same total cost.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    Only Prim produces a valid MCST.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q28" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    Only Kruskal produces a valid MCST.
+                                </span>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Question 29 -->
+                <div class="question" id="q29" data-question="29">
+                    <div class="question-header">
+                        <span class="question-number">29</span>
+                        <p class="question-text">Which of the following is a <strong>valid check</strong> to verify that a structure is an MCST?</p>
+                    </div>
+                    <div class="options">
+                        <label class="option">
+                            <input type="radio" name="q29" value="a">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">A.</span>
+                                    It has V edges and contains at least one cycle.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="b">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">B.</span>
+                                    It includes all vertices, has V − 1 edges, and has no cycles.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="c">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">C.</span>
+                                    It uses only the highest-cost edges.
+                                </span>
+                            </span>
+                        </label>
+                        <label class="option">
+                            <input type="radio" name="q29" value="d">
+                            <span class="option-label">
+                                <span class="option-marker"></span>
+                                <span class="option-text">
+                                    <span class="option-key">D.</span>
+                                    It has fewer vertices than the original graph.
                                 </span>
                             </span>
                         </label>
