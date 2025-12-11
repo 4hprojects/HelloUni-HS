@@ -452,25 +452,32 @@ async function checkAnswers() {
     const total = totalCells;
     const percent = total > 0 ? Math.round((score / total) * 100) : 0;
 
-    // Submit to backend (simulated)
+    // Submit to backend
     try {
-        // In a real application, you would send this to your server
-        console.log('Submitting:', {
-            userInfo,
-            score,
-            total,
-            percent,
-            answers: userAnswers
+        const response = await fetch('/api/array-trace/submit-score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                studentIDNumber: userInfo.studentIDNumber,
+                email: userInfo.email,
+                fullname: userInfo.fullname,
+                score,
+                total,
+                percent,
+                answers: userAnswers,
+                timestamp: new Date().toISOString()
+            })
         });
-        
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 500));
-        
-        messageEl.innerHTML = `
-            <strong>Answers submitted successfully!</strong><br>
-            Score: ${score} / ${total} (${percent}%)<br>
-            Student: ${userInfo.fullname} (${userInfo.studentIDNumber})
-        `;
+        const result = await response.json();
+        if (result.success) {
+            messageEl.innerHTML = `
+                <strong>Answers submitted successfully!</strong><br>
+                Score: ${score} / ${total} (${percent}%)<br>
+                Student: ${userInfo.fullname} (${userInfo.studentIDNumber})
+            `;
+        } else {
+            messageEl.textContent = "Error submitting your answers. Please try again.";
+        }
     } catch (err) {
         messageEl.textContent = "Error submitting your answers. Please try again.";
     }
