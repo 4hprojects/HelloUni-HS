@@ -465,6 +465,8 @@ async function checkAnswers() {
                 total,
                 percent,
                 answers: userAnswers,
+                templateId: currentTemplate.id,
+                templateName: currentTemplate.name,
                 timestamp: new Date().toISOString()
             })
         });
