@@ -3,9 +3,9 @@ const router = express.Router();
 
 router.post('/submit-score', async (req, res) => {
     const db = req.app.locals.db; // Use the db reference from app.locals
-    const { studentIDNumber, email, fullname, score, total, percent, answers, timestamp } = req.body;
+    const { studentIDNumber, email, fullname, score, total, percent, answers, templateId, templateName, timestamp } = req.body;
 
-    if (!studentIDNumber || !email || !fullname || typeof score !== 'number' || typeof total !== 'number' || typeof percent !== 'number' || !Array.isArray(answers)) {
+    if (!studentIDNumber || !email || !fullname || typeof score !== 'number' || typeof total !== 'number' || typeof percent !== 'number' || !Array.isArray(answers) || !templateId || !templateName) {
         return res.status(400).json({ error: 'Invalid data' });
     }
 
@@ -16,8 +16,10 @@ router.post('/submit-score', async (req, res) => {
             fullname,
             score,
             total,
-            percent, // <-- Add this line
+            percent,
             answers,
+            templateId,
+            templateName,
             timestamp: timestamp || new Date().toISOString()
         });
         res.json({ success: true });
