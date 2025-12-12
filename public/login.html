@@ -36,8 +36,9 @@
 <main>
     <form id="loginForm" action="/login" method="post" class="form-container">
         <h3 align="center">Login</h3>
-        <input type="text" placeholder="Student ID Number" id="studentIDNumber" name="studentIDNumber" maxlength="7" pattern="\d{7}" required>
+        <input type="text" placeholder="Student ID Number" id="studentIDNumber" name="studentIDNumber" maxlength="8" pattern="\d{7,8}" required>
         <div id="emailError" class="error-message"></div>
+        <div id="studentIDError" class="error-message"></div>
 
         <div class="password-toggle">
             <input type="password" placeholder="Password" id="password" name="password" required>
@@ -55,22 +56,20 @@
 </main>
 
 <script>
-        // Password visibility toggle
-        document.getElementById('togglePassword').addEventListener('click', function () {
-            const passwordInput = document.getElementById('password');
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            this.textContent = type === 'password' ? '👁️' : '🙈';
-        });
-
+    // Password visibility toggle
+    document.getElementById('togglePassword').addEventListener('click', function () {
+        const passwordInput = document.getElementById('password');
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        this.textContent = type === 'password' ? '👁️' : '🙈';
+    });
 
     document.getElementById('studentIDNumber').addEventListener('input', function () {
         const input = this.value;
-        if (!/^\d{0,7}$/.test(input)) {
-            this.value = input.slice(0, 7).replace(/\D/g, ''); // Trim excess or invalid characters
+        if (!/^\d{0,8}$/.test(input)) {
+            this.value = input.slice(0, 8).replace(/\D/g, ''); // Trim excess or invalid characters
         }
     });
-
 
     // Client-side form validation and fetch logic for login
     document.getElementById('loginForm').addEventListener('submit', function(event) {
@@ -80,25 +79,33 @@
         document.getElementById('emailError').textContent = '';
         document.getElementById('passwordError').textContent = '';
         document.getElementById('formError').textContent = '';
+        document.getElementById('formError').style.display = 'none';
 
         const studentIDNumber = document.getElementById('studentIDNumber').value.trim();
         const password = document.getElementById('password').value.trim();
         let hasError = false;
 
         // New validation for student ID number
-        if (!/^\d{1,7}$/.test(studentIDNumber)) {
-            document.getElementById('studentIDError').textContent = 'Please enter a valid student ID number.';
+        if (!/^\d{7,8}$/.test(studentIDNumber)) {
+            document.getElementById('studentIDError').textContent = 'Student ID must be exactly 7 or 8 digits.';
             hasError = true;
+        } else {
+            document.getElementById('studentIDError').textContent = '';
         }
-
 
         // Password validation (minimum 8 characters)
         if (password.length < 8) {
             document.getElementById('passwordError').textContent = 'Password must be at least 8 characters long.';
             hasError = true;
+        } else {
+            document.getElementById('passwordError').textContent = '';
         }
 
-        if (hasError) return;
+        if (hasError) {
+            document.getElementById('formError').textContent = 'Invalid username or password.';
+            document.getElementById('formError').style.display = 'block';
+            return;
+        }
 
         fetch('/login', {
             method: 'POST',
@@ -106,79 +113,39 @@
             body: JSON.stringify({ studentIDNumber: studentIDNumber, password: password }),
             credentials: 'include'
         })
-
         .then(response => response.json().then(data => {
             if (!response.ok) throw new Error(data.message || 'Login failed.');
             return data;
         }))
         .then(data => {
             if (data.success) {
-                // Check user role and redirect accordingly
                 window.location.href = data.role === 'admin' ? '/admin_dashboard' : '/dashboard';
             } else {
-                alert(data.message || 'Login failed.');
-                document.getElementById('formError').textContent = data.message;
+                const formError = document.getElementById('formError');
+                formError.textContent = data.message || 'Login failed.';
+                formError.style.display = 'block';
             }
         })
         .catch(error => {
-            console.error('Error during login:', error);
-            document.getElementById('formError').textContent = error.message || 'An error occurred during login.';
+            const formError = document.getElementById('formError');
+            formError.textContent = error.message || 'An error occurred during login.';
+            formError.style.display = 'block';
         });
     });
 
     document.addEventListener('DOMContentLoaded', function () {
-    const studentIDInput = document.getElementById('studentIDNumber');
-    if (studentIDInput) {
-        studentIDInput.addEventListener('input', function () {
-            const input = this.value;
-            if (!/^\d{0,7}$/.test(input)) {
-                this.value = input.slice(0, 7).replace(/\D/g, '');
-            }
-        });
-    } else {
-        console.error('Element with ID "studentIDNumber" not found');
-    }
-
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const studentIDNumber = studentIDInput.value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            // Validation logic
-            if (!/^\d{7}$/.test(studentIDNumber)) {
-                alert('Student ID must be exactly 7 digits.');
-                return;
-            }
-            if (password.length < 8) {
-                alert('Password must be at least 8 characters long.');
-                return;
-            }
-
-            // Proceed with form submission
-            fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ studentIDNumber, password }),
-                credentials: 'include',
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (data.success) {
-                        window.location.href = data.role === 'admin' ? '/admin_dashboard' : '/dashboard';
-                    } else {
-                        alert(data.message || 'Login failed.');
-                    }
-                })
-                .catch((error) => {
-                    console.error('Error during login:', error);
-                    alert('An error occurred during login.');
-                });
-        });
-    }
-});
+        const studentIDInput = document.getElementById('studentIDNumber');
+        if (studentIDInput) {
+            studentIDInput.addEventListener('input', function () {
+                const input = this.value;
+                if (!/^\d{0,8}$/.test(input)) {
+                    this.value = input.slice(0, 8).replace(/\D/g, '');
+                }
+            });
+        } else {
+            console.error('Element with ID "studentIDNumber" not found');
+        }
+    });
 </script>
 </body>
 </html>
