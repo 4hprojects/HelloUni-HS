@@ -197,6 +197,22 @@ router.get('/java-leaderboard/quizids', isAdmin, async (req, res) => {
     res.json({ quizIDs });
 });
 
+// POST /java-leaderboard/delete
+router.post('/java-leaderboard/delete', isAdmin, async (req, res) => {
+    const db = req.app.locals.db;
+    const collection = db.collection('tblQuizLeaderboard');
+    const { idNumber, quizID } = req.body;
+    if (!idNumber || !quizID) {
+        return res.status(400).json({ success: false, message: 'Missing idNumber or quizID' });
+    }
+    const result = await collection.deleteOne({ idNumber, quizID });
+    if (result.deletedCount === 1) {
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, message: 'No matching record found' });
+    }
+});
+
 // Helper for time formatting
 function formatTime(ms) {
     if (!ms || isNaN(ms)) return '';
