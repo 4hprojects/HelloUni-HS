@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array Trace Reports – Admin</title>
+    <link rel="stylesheet" href="css/java-activities.css">
+</head>
+<body>
+    <header>
+        <h1>Array Trace Reports</h1>
+        <nav>
+            <a href="/admin_dashboard">← Back to Dashboard</a>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <div>
+                <label for="field-select">Columns:</label>
+                <select id="field-select" multiple>
+                    <!-- JS will populate options -->
+                </select>
+                <button id="apply-fields-btn">Apply</button>
+                <button id="export-excel-btn">Export to Excel</button>
+                <button id="download-all-xlsx-btn">Download All as XLSX</button>
+            </div>
+            <div>
+                <input type="text" id="search-input" placeholder="Search by name, ID, or email">
+                <button id="search-btn">Search</button>
+            </div>
+        </section>
+        <section>
+            <table id="reports-table">
+                <thead></thead>
+                <tbody></tbody>
+            </table>
+            <div id="pagination"></div>
+        </section>
+    </main>
+    <script src="js/array-trace-reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Java Activities Leaderboard</title>
+
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/java-activities.css">
+</head>
+<body>
+    <header>
+        <h1>
+            <span class="material-icons" style="vertical-align: middle;">leaderboard</span>
+            Java Activities Leaderboard
+        </h1>
+        <nav>
+            <a href="/admin_dashboard.html" class="back-link">
+                <span class="material-icons">arrow_back</span> Back to Dashboard
+            </a>
+        </nav>
+    </header>
+    <main>
+        <section class="controls-section">
+            <div class="controls-grid">
+                <div>
+                    <h2 class="section-heading"><span class="material-icons">filter_list</span> Filter Results</h2>
+                    <form id="filterForm">
+                        <input type="text" id="searchInput" placeholder="Search by student ID, name, quiz ID..." autocomplete="off">
+                        <label for="dateFrom">From:</label>
+                        <input type="date" id="dateFrom" name="dateFrom">
+                        <label for="dateTo">To:</label>
+                        <input type="date" id="dateTo" name="dateTo">
+                        <label for="quizIdSelect">Quiz ID:</label>
+                        <select id="quizIdSelect">
+                            <option value="">All Quizzes</option>
+                            <!-- Options will be populated by JS -->
+                        </select>
+                        <button type="submit">Filter</button>
+                        <button type="button" id="resetButton">Reset</button>
+                    </form>
+                </div>
+                <div>
+                    <h2 class="section-heading"><span class="material-icons">download</span> Export</h2>
+                    <div class="export-section">
+                        <button id="exportXLSX"><span class="material-icons">download</span> Export XLSX</button>
+                        <button id="exportPDF"><span class="material-icons">picture_as_pdf</span> Export PDF</button>
+                    </div>
+                </div>
+                <div>
+                    <h2 class="section-heading"><span class="material-icons">table_rows</span> Pagination</h2>
+                    <div class="pagination-section">
+                        <label for="rowsPerPage">Rows per page:</label>
+                        <select id="rowsPerPage">
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        <button id="seeMoreButton">See More</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="table-section">
+            <table id="leaderboardTable">
+                <thead>
+                    <tr>
+                        <th data-sort="idNumber">Student ID</th>
+                        <th data-sort="firstName">First Name</th>
+                        <th data-sort="lastName">Last Name</th>
+                        <th data-sort="quizID">Quiz ID</th>
+                        <th data-sort="score">Score</th>
+                        <th data-sort="correctItems">Correct Items</th>
+                        <th data-sort="totalItems">Total Items</th>
+                        <th data-sort="accuracy">Accuracy</th>
+                        <th data-sort="timeTaken">Time Taken</th>
+                        <th data-sort="submittedAt">Submitted At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboardBody">
+                    <!-- Data rows will be injected here -->
+                </tbody>
+            </table>
+            <div id="emptyState" style="display:none; text-align:center; margin:20px;">
+                <p>No results found.</p>
+                <button id="emptyResetButton">Reset Filters</button>
+            </div>
+        </section>
+        <div class="pagination" id="pagination"></div>
+    </main>
+    <script src="../js/java-leaderboard.js"></script>
+</body>
+</html>

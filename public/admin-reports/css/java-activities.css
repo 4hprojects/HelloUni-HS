@@ -1,0 +1,484 @@
+/* activity_reports.css - Modern UI/UX for Java Leaderboard */
+
+:root {
+  /* Color Palette - Adjust these to match hellograde.online */
+  --color-primary: #4361ee;      /* Primary brand color */
+  --color-primary-dark: #3a56d4; /* Primary dark */
+  --color-secondary: #7209b7;    /* Secondary brand color */
+  --color-success: #4cc9f0;      /* Accent color */
+  --color-text: #2b2d42;         /* Main text color */
+  --color-text-light: #6c757d;   /* Lighter text */
+  --color-background: #f8f9fa;   /* Page background */
+  --color-surface: #ffffff;      /* Card/surface background */
+  --color-border: #e9ecef;       /* Border color */
+  --color-hover: #f1f3f9;        /* Row hover color */
+  --color-shadow: rgba(0, 0, 0, 0.1); /* Shadow color */
+}
+
+/* Base Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  padding: 0;
+  margin: 0;
+}
+
+/* Header Styles */
+header {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  color: white;
+  padding: 1.5rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px var(--color-shadow);
+}
+
+header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.back-link {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.back-link:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* --- Improved Page Organization Styles --- */
+
+/* Section Headings */
+.section-heading {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-description {
+  font-size: 1rem;
+  color: var(--color-text-light);
+  margin-bottom: 1rem;
+}
+
+/* Visual Dividers */
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  border: none;
+  margin: 2rem 0 1.5rem 0;
+  opacity: 0.15;
+  border-radius: 2px;
+}
+
+/* Main Content Layout */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Section Containers */
+.filter-section, .export-section, .pagination-section, .table-section {
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Filter Form Styles */
+#filterForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1rem;
+  align-items: end;
+}
+
+#filterForm label {
+  font-weight: 500;
+  color: var(--color-text-light);
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+#searchInput, #dateFrom, #dateTo, #quizIdSelect, #rowsPerPage {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+#searchInput:focus, #dateFrom:focus, #dateTo:focus, #quizIdSelect:focus, #rowsPerPage:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+}
+
+#filterForm button, #resetButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  height: fit-content;
+}
+
+#filterForm button:hover, #resetButton:hover {
+  background-color: var(--color-primary-dark);
+}
+
+#filterForm button:active, #resetButton:active {
+  transform: translateY(1px);
+}
+
+#resetButton {
+  background-color: #6c757d;
+}
+
+#resetButton:hover {
+  background-color: #5a6268;
+}
+
+/* Export Section */
+.export-section {
+  display: flex;
+  gap: 1rem;
+}
+
+#exportXLSX, #exportPDF {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-surface);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+#exportXLSX:hover, #exportPDF:hover {
+  background-color: var(--color-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px var(--color-shadow);
+}
+
+/* Pagination Section */
+.pagination-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+#seeMoreButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-success);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+#seeMoreButton:hover {
+  background-color: #3ab0d7;
+  transform: translateY(-2px);
+}
+
+/* Table Styles */
+.table-section {
+  position: relative;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--color-border);
+}
+
+#leaderboardTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+#leaderboardTable thead {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+#leaderboardTable th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  position: relative;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+/* Sortable column indicator */
+#leaderboardTable th[data-sort]::after {
+  content: '↕';
+  margin-left: 0.5rem;
+  font-size: 0.8rem;
+  opacity: 0.7;
+}
+
+#leaderboardTable th[data-sort]:hover {
+  background-color: var(--color-primary-dark);
+  cursor: pointer;
+}
+
+#leaderboardTable tbody tr {
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.2s;
+}
+
+/* Alternating row colors for leaderboard table */
+#leaderboardTable tbody tr:nth-child(even) {
+  background-color: #f3f6fd; /* Light blue shade for even rows */
+}
+
+#leaderboardTable tbody tr:nth-child(odd) {
+  background-color: var(--color-surface); /* Default surface for odd rows */
+}
+
+/* Keep hover effect above alternating colors */
+#leaderboardTable tbody tr:hover {
+  background-color: var(--color-hover) !important;
+}
+
+#leaderboardTable td {
+  padding: 1rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
+}
+
+/* Empty State */
+#emptyState {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-light);
+}
+
+#emptyState p {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+#emptyResetButton {
+  padding: 0.75rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#emptyResetButton:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* Pagination Controls */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+}
+
+.pagination button:disabled {
+  background-color: var(--color-primary);
+  color: white;
+  cursor: default;
+}
+
+/* Sidebar for Secondary Actions */
+@media (min-width: 992px) {
+  .main-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+  .main-content {
+    grid-column: 1;
+  }
+  .sidebar {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+}
+
+/* Collapsible Advanced Filters */
+.advanced-filters {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: var(--color-background);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  display: none;
+}
+
+.advanced-filters.active {
+  display: block;
+}
+
+/* Toggle Button */
+.toggle-advanced-btn {
+  background: none;
+  border: none;
+  color: var(--color-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  text-align: left;
+  padding: 0;
+  transition: color 0.2s;
+}
+
+.toggle-advanced-btn:hover {
+  color: var(--color-secondary);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  main {
+    padding: 1rem;
+  }
+  
+  #filterForm {
+    grid-template-columns: 1fr;
+  }
+  
+  .pagination-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .export-section {
+    flex-direction: column;
+  }
+  
+  #leaderboardTable {
+    font-size: 0.8rem;
+  }
+  
+  #leaderboardTable th, 
+  #leaderboardTable td {
+    padding: 0.5rem;
+  }
+}
+
+.controls-section {
+  margin-bottom: 2rem;
+}
+
+.controls-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  align-items: start;
+}
+
+.controls-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  background-color: var(--color-surface);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px var(--color-shadow);
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.controls-inline label {
+  font-weight: 500;
+  color: var(--color-text-light);
+  font-size: 1rem;
+}
+.controls-inline select,
+.controls-inline input[type="text"],
+.controls-inline input[type="date"] {
+  padding: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 1rem;
+  min-width: 120px;
+}
+.controls-inline button {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+.controls-inline button:hover {
+  background-color: var(--color-primary-dark);
+}
