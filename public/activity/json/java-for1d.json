@@ -1,0 +1,340 @@
+{
+  "quizID": "java-for1d-001",
+  "title": "For Loops and 1D Arrays Quiz",
+  "description": "Test your understanding of Java for loops and 1D arrays. Covers loop syntax, array basics, and common pitfalls.",
+  "meta": {
+    "multipleChoiceCount": 25,
+    "trueFalseCount": 10,
+    "showAnswersImmediately": true,
+    "timeLimitSeconds": 15
+  },
+  "multipleChoice": [
+    {
+      "id": 1,
+      "question": "How many times will this loop run? for (int i = 0; i < 5; i++) { }",
+      "choices": {
+        "a": "4",
+        "b": "5",
+        "c": "6",
+        "d": "Infinite"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 2,
+      "question": "What is the first value printed? for (int i = 2; i <= 4; i++) { System.out.print(i + \" \"); }",
+      "choices": {
+        "a": "1",
+        "b": "2",
+        "c": "3",
+        "d": "4"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 3,
+      "question": "What is the correct way to declare a 1D int array with 10 elements?",
+      "choices": {
+        "a": "int arr = new int[10];",
+        "b": "int arr[] = new int[10];",
+        "c": "int arr[10];",
+        "d": "new int arr[10];"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 4,
+      "question": "What is the last valid index of int[] x = new int[6];?",
+      "choices": {
+        "a": "5",
+        "b": "6",
+        "c": "0",
+        "d": "7"
+      },
+      "answer": "a"
+    },
+    {
+      "id": 5,
+      "question": "What does x.length represent for an array x?",
+      "choices": {
+        "a": "The last index",
+        "b": "Number of elements",
+        "c": "Sum of elements",
+        "d": "Size in bytes"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 6,
+      "question": "What is printed? int[] a = {5, 9, 3}; System.out.println(a[0]);",
+      "choices": {
+        "a": "3",
+        "b": "5",
+        "c": "9",
+        "d": "Error"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 7,
+      "question": "How many times does this loop run? for (int i = 10; i > 0; i--) { }",
+      "choices": {
+        "a": "9",
+        "b": "10",
+        "c": "11",
+        "d": "Infinite"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 8,
+      "question": "Which is the correct way to access the third element of int[] arr?",
+      "choices": {
+        "a": "arr[2]",
+        "b": "arr[3]",
+        "c": "arr(2)",
+        "d": "arr(3)"
+      },
+      "answer": "a"
+    },
+    {
+      "id": 9,
+      "question": "What is printed? for (int i = 0; i < 3; i++) { System.out.print(\"Hi \"); }",
+      "choices": {
+        "a": "Hi",
+        "b": "Hi Hi",
+        "c": "Hi Hi Hi",
+        "d": "No output"
+      },
+      "answer": "c"
+    },
+    {
+      "id": 10,
+      "question": "What happens if you access index 5 in int[] a = new int[5];?",
+      "choices": {
+        "a": "Returns 0",
+        "b": "Returns null",
+        "c": "ArrayIndexOutOfBoundsException",
+        "d": "No problem"
+      },
+      "answer": "c"
+    },
+    {
+      "id": 11,
+      "question": "What is the output? int[] n = {1, 2, 3, 4}; System.out.println(n.length);",
+      "choices": {
+        "a": "3",
+        "b": "4",
+        "c": "5",
+        "d": "Error"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 12,
+      "question": "Which loop visits every element once?",
+      "choices": {
+        "a": "for (int i = 0; i <= arr.length; i++)",
+        "b": "for (int i = 0; i < arr.length; i++)",
+        "c": "for (int i = 1; i <= arr.length; i++)",
+        "d": "for (int i = 1; i < arr.length - 1; i++)"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 13,
+      "question": "What is printed? int[] x = {2, 4, 6}; System.out.println(x[1]);",
+      "choices": {
+        "a": "2",
+        "b": "4",
+        "c": "6",
+        "d": "Error"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 14,
+      "question": "What does this loop print? for (int i = 1; i <= 3; i++) { System.out.print(i + \" \"); }",
+      "choices": {
+        "a": "1 2",
+        "b": "1 2 3",
+        "c": "2 3 4",
+        "d": "0 1 2"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 15,
+      "question": "Default value of each element in new int[4] is:",
+      "choices": {
+        "a": "1",
+        "b": "0",
+        "c": "null",
+        "d": "random value"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 16,
+      "question": "Which statement updates the first element of arr to 10?",
+      "choices": {
+        "a": "arr[1] = 10;",
+        "b": "arr[0] = 10;",
+        "c": "arr.first = 10;",
+        "d": "arr = 10;"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 17,
+      "question": "How many times does this loop run? for (int i = 0; i <= 4; i++) { }",
+      "choices": {
+        "a": "4",
+        "b": "5",
+        "c": "6",
+        "d": "Infinite"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 18,
+      "question": "Which loop prints only even numbers from 0 to 6?",
+      "choices": {
+        "a": "for (int i = 0; i <= 6; i++)",
+        "b": "for (int i = 2; i <= 6; i += 2)",
+        "c": "for (int i = 1; i <= 6; i += 2)",
+        "d": "for (int i = 0; i < 6; i += 3)"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 19,
+      "question": "What is printed? int[] a = {10, 20, 30}; System.out.println(a[2]);",
+      "choices": {
+        "a": "10",
+        "b": "20",
+        "c": "30",
+        "d": "Error"
+      },
+      "answer": "c"
+    },
+    {
+      "id": 20,
+      "question": "Which for loop counts down from 5 to 1?",
+      "choices": {
+        "a": "for (int i = 1; i <= 5; i++)",
+        "b": "for (int i = 5; i >= 1; i--)",
+        "c": "for (int i = 5; i <= 1; i--)",
+        "d": "for (int i = 1; i >= 5; i++)"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 21,
+      "question": "What will this loop print? for (int i = 0; i < 4; i += 2) { System.out.print(i + \" \"); }",
+      "choices": {
+        "a": "0 1 2 3",
+        "b": "0 2",
+        "c": "2 4",
+        "d": "0 2 4"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 22,
+      "question": "Which is true about arrays in Java?",
+      "choices": {
+        "a": "Index starts at 1",
+        "b": "Size is fixed after creation",
+        "c": "One array can hold int and String together",
+        "d": "Size can change any time"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 23,
+      "question": "What is printed? int[] nums = {2, 4, 6, 8}; System.out.println(nums[0] + nums[1]);",
+      "choices": {
+        "a": "4",
+        "b": "6",
+        "c": "8",
+        "d": "10"
+      },
+      "answer": "d"
+    },
+    {
+      "id": 24,
+      "question": "Which loop visits only indices 0, 2, 4 of arr?",
+      "choices": {
+        "a": "for (int i = 0; i < arr.length; i++)",
+        "b": "for (int i = 0; i < arr.length; i += 2)",
+        "c": "for (int i = 1; i < arr.length; i += 2)",
+        "d": "for (int i = 2; i < arr.length; i++)"
+      },
+      "answer": "b"
+    },
+    {
+      "id": 25,
+      "question": "What happens here? int[] a = new int[3]; a[0] = 5; System.out.println(a[0]);",
+      "choices": {
+        "a": "Prints 0",
+        "b": "Prints 5",
+        "c": "Prints null",
+        "d": "Error"
+      },
+      "answer": "b"
+    }
+  ],
+  "trueFalse": [
+    {
+      "id": 26,
+      "question": "A for loop always counts up.",
+      "answer": false
+    },
+    {
+      "id": 27,
+      "question": "The first index of a Java array is 0.",
+      "answer": true
+    },
+    {
+      "id": 28,
+      "question": "You can change the length of an existing array directly.",
+      "answer": false
+    },
+    {
+      "id": 29,
+      "question": "arr.length gives how many elements are inside the array.",
+      "answer": true
+    },
+    {
+      "id": 30,
+      "question": "Accessing an index outside the valid range causes an exception.",
+      "answer": true
+    },
+    {
+      "id": 31,
+      "question": "A 1D array can store values of different data types.",
+      "answer": false
+    },
+    {
+      "id": 32,
+      "question": "A for loop must run at least once.",
+      "answer": false
+    },
+    {
+      "id": 33,
+      "question": "All elements in new int[5] are 0 at the beginning.",
+      "answer": true
+    },
+    {
+      "id": 34,
+      "question": "This loop visits every element of arr: for (int i = 0; i < arr.length; i++)",
+      "answer": true
+    },
+    {
+      "id": 35,
+      "question": "You can use a for loop to go through an array from the last index to the first.",
+      "answer": true
+    }
+  ]
+}
