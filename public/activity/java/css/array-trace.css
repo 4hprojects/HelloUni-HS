@@ -178,7 +178,8 @@ button:active:not(:disabled) {
 /* Trace table container */
 .table-container {
     flex: 1;
-    overflow: auto;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
     border: 1px solid #e5e7eb;
     border-radius: 0.75rem;
     background-color: #ffffff;
@@ -194,6 +195,7 @@ button:active:not(:disabled) {
     table-layout: fixed;
     margin-left: 0;   /* Left align the table */
     margin-right: 0;
+    min-width: 500px;
 }
 
 .trace-table thead {
@@ -246,6 +248,7 @@ button:active:not(:disabled) {
     border: 1px solid #d1d5db;
     background-color: #ffffff;
     text-align: center;
+    min-height: 44px;
 }
 
 .trace-input:focus {
@@ -391,6 +394,31 @@ button:active:not(:disabled) {
     background: #1d4ed8;
 }
 
+/* Loading spinner for generate button */
+#generate-btn.generating {
+    position: relative;
+    color: transparent;
+}
+
+#generate-btn.generating::after {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
 /* Responsive adjustments */
 @media (max-width: 900px) {
     .main-flex {
@@ -435,5 +463,446 @@ button:active:not(:disabled) {
     
     .trace-input {
         padding: 0.1rem 0.15rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .controls, .buttons-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    button {
+        width: 100%;
+        min-width: unset;
+    }
+    .code-section,
+    .trace-section {
+        height: auto;
+        min-height: unset;
+    }
+    .main-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .page {
+        padding: 0.5rem;
+    }
+    .code-block, .table-container {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .modal-form {
+        padding: 1rem;
+        max-width: 95vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .controls, .buttons-row {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    button {
+        width: 100%;
+        min-width: unset;
+    }
+    .code-section,
+    .trace-section {
+        height: auto;
+        min-height: unset;
+    }
+    .main-flex {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .page {
+        padding: 0.5rem;
+    }
+    .code-block, .table-container {
+        padding: 0.5rem;
+        font-size: 0.8rem;
+    }
+    
+    .modal-form {
+        padding: 1rem;
+        max-width: 95vw;
+    }
+}
+
+/* 6. Remove fixed heights for better scrolling */
+.page, .code-section, .trace-section {
+    height: auto !important;
+    min-height: unset !important;
+    max-height: unset !important;
+}
+
+/* ===== MOBILE-FIRST IMPROVEMENTS ===== */
+
+/* 1. Base mobile improvements */
+@media (max-width: 768px) {
+    .page {
+        padding: 0.75rem 0.5rem;
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+    }
+
+    .page-header h1 {
+        font-size: 1.3rem;
+        line-height: 1.3;
+    }
+
+    .page-header p {
+        font-size: 0.85rem;
+    }
+
+    /* 2. Better controls for mobile */
+    .controls {
+        padding: 0.75rem;
+        margin-bottom: 0.75rem;
+        gap: 0.75rem;
+    }
+
+    .control-row {
+        min-width: unset;
+        width: 100%;
+    }
+
+    /* Template select improvements */
+    #template-select {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* 3. Button improvements for mobile */
+    .buttons-row {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
+    }
+
+    button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        min-height: 44px; /* Better touch target */
+        margin: 0.25rem 0;
+    }
+
+    /* 4. Main layout adjustments */
+    .main-flex {
+        flex-direction: column;
+        gap: 1rem;
+        height: auto;
+        min-height: 0;
+    }
+
+    .code-section,
+    .trace-section {
+        width: 100%;
+        flex: none;
+    }
+
+    .code-section {
+        max-height: 40vh;
+    }
+
+    .trace-section {
+        max-height: 60vh;
+    }
+
+    /* 5. Code block improvements */
+    .code-block {
+        min-height: 200px;
+        max-height: 300px;
+        font-size: 0.85rem;
+        padding: 0.75rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Reduce watermark size on mobile */
+    .code-section::after {
+        font-size: 1.5rem;
+        transform: translate(-50%, -50%) rotate(-30deg) scale(0.8);
+    }
+
+    /* 6. Table improvements for mobile */
+    .table-container {
+        max-height: 400px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 0.5rem;
+    }
+
+    .trace-table {
+        min-width: 600px; /* Allow horizontal scrolling on small screens */
+    }
+
+    .trace-table th,
+    .trace-table td {
+        min-width: 90px;
+        max-width: 90px;
+        padding: 0.35rem 0.25rem;
+        font-size: 0.75rem;
+    }
+
+    /* Larger inputs for touch */
+    .trace-input {
+        min-height: 48px;
+        font-size: 0.85rem;
+        padding: 0.35rem 0.5rem;
+        border-radius: 0.5rem;
+    }
+
+    /* 7. Result and message improvements */
+    .result-row {
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 0.75rem;
+    }
+
+    .result-summary {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .message {
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    /* 8. Modal improvements for mobile */
+    #tracing-modal {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 20vh;
+    }
+
+    .modal-form {
+        width: 95vw;
+        max-width: 95vw;
+        padding: 1.25rem;
+        border-radius: 0.75rem;
+    }
+
+    .modal-form h2 {
+        font-size: 1.25rem;
+    }
+
+    .modal-form input {
+        padding: 0.75rem;
+        font-size: 1rem;
+        min-height: 48px;
+    }
+
+    .modal-form button[type="submit"] {
+        padding: 0.75rem;
+        font-size: 1rem;
+        min-height: 48px;
+    }
+}
+
+/* 9. Small mobile (iPhone SE, etc.) */
+@media (max-width: 375px) {
+    .page {
+        padding: 0.5rem;
+    }
+
+    .page-header h1 {
+        font-size: 1.1rem;
+    }
+
+    .code-block {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    .trace-table th,
+    .trace-table td {
+        min-width: 80px;
+        max-width: 80px;
+        padding: 0.25rem 0.15rem;
+        font-size: 0.7rem;
+    }
+
+    .trace-input {
+        min-height: 44px;
+        font-size: 0.8rem;
+        padding: 0.25rem 0.35rem;
+    }
+
+    .modal-form {
+        padding: 1rem;
+    }
+
+    .modal-form h2 {
+        font-size: 1.1rem;
+    }
+}
+
+/* 10. Tablet improvements */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .main-flex {
+        gap: 1rem;
+    }
+
+    .code-section {
+        flex: 0 0 40%;
+    }
+
+    .trace-section {
+        flex: 0 0 60%;
+    }
+
+    .code-block {
+        min-height: 350px;
+        font-size: 0.85rem;
+    }
+
+    .trace-table th,
+    .trace-table td {
+        min-width: 95px;
+        max-width: 95px;
+        font-size: 0.7rem;
+    }
+
+    .trace-input {
+        font-size: 0.75rem;
+        min-height: 40px;
+    }
+
+    .buttons-row {
+        flex-wrap: wrap;
+    }
+
+    button {
+        flex: 1;
+        min-width: 150px;
+    }
+}
+
+/* 11. Prevent zoom on input focus for mobile */
+@media (max-width: 768px) {
+    input,
+    select,
+    textarea {
+        font-size: 16px !important; /* Prevents iOS zoom on focus */
+    }
+
+    .trace-input {
+        font-size: 16px !important;
+    }
+}
+
+/* 12. Better touch feedback */
+@media (max-width: 768px) {
+    button:active:not(:disabled) {
+        transform: scale(0.98);
+        transition: transform 0.1s ease;
+    }
+
+    .trace-input:focus {
+        outline: 3px solid #2563eb;
+        outline-offset: -1px;
+    }
+}
+
+/* 13. Improve scroll behavior */
+@media (max-width: 768px) {
+    .table-container,
+    .code-block {
+        scrollbar-width: thin;
+        scrollbar-color: #2563eb #f1f1f1;
+    }
+
+    .table-container::-webkit-scrollbar,
+    .code-block::-webkit-scrollbar {
+        height: 6px;
+        width: 6px;
+    }
+
+    .table-container::-webkit-scrollbar-track,
+    .code-block::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+
+    .table-container::-webkit-scrollbar-thumb,
+    .code-block::-webkit-scrollbar-thumb {
+        background: #2563eb;
+        border-radius: 10px;
+    }
+}
+
+/* 14. Orientation-specific adjustments */
+@media (max-width: 768px) and (orientation: landscape) {
+    .main-flex {
+        flex-direction: row;
+    }
+
+    .code-section,
+    .trace-section {
+        max-height: 70vh;
+    }
+
+    .code-section {
+        flex: 0 0 40%;
+    }
+
+    .trace-section {
+        flex: 0 0 60%;
+    }
+}
+
+/* 15. Accessibility improvements for mobile */
+@media (max-width: 768px) {
+    /* Larger tap targets */
+    label,
+    select,
+    input {
+        min-height: 44px;
+        line-height: 44px;
+    }
+
+    /* Increase spacing for better readability */
+    .control-row {
+        gap: 0.5rem;
+    }
+
+    /* Better visual hierarchy */
+    h2 {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .section-note {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* 16. Loading state improvements */
+@media (max-width: 768px) {
+    /* Show loading state for generation */
+    #generate-btn:disabled {
+        position: relative;
+        color: transparent;
+    }
+
+    #generate-btn:disabled::after {
+        content: "Generating...";
+        position: absolute;
+        color: white;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
