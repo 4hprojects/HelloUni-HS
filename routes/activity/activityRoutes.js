@@ -1,83 +1,475 @@
-const quizFiles = [
-  "java-basics",
-  "java-intermediate",
-  "java-hard-p1",
-  "java-hard-p2",
-  "java-for1d"
-];
+//routes/activity/activityRoutes.js
+const express = require('express');
+const router = express.Router();
+const { MongoClient } = require('mongodb');
+const { sendEmail } = require('../../utils/emailSender');
 
-async function fetchQuizMeta(filename) {
-  const res = await fetch(`/api/activity/json/${filename}`);
-  if (!res.ok) return null;
-  return await res.json();
+const mongoUri = process.env.MONGODB_URI;
+let mongoClient;
+
+async function getDb() {
+    if (!mongoUri) throw new Error('MONGODB_URI not set');
+    if (!mongoClient) mongoClient = new MongoClient(mongoUri);
+    // Check connection
+    if (mongoClient && !mongoClient.topology) {
+        await mongoClient.connect();
+    }
+    return mongoClient.db('myDatabase');
 }
 
-async function renderQuizActivities() {
-  const container = document.getElementById('quizActivities');
-  container.innerHTML = '';
-  for (const file of quizFiles) {
-    const quiz = await fetchQuizMeta(file);
-    if (!quiz) continue;
-    const card = document.createElement('div');
-    card.className = 'bg-white rounded-lg shadow-md p-6 animate hover:shadow-lg transition-shadow flex flex-col justify-between quiz-card';
-    card.innerHTML = `
-      <div>
-        <div class="flex items-center mb-4">
-          <div class="bg-green-100 p-3 rounded-full mr-4">
-            <span class="material-icons text-green-600">quiz</span>
-          </div>
-          <div>
-            <h3 class="font-semibold text-lg">${quiz.title || 'Untitled Quiz'}</h3>
-            <p class="text-gray-500 text-sm">${quiz.description || ''}</p>
-          </div>
-        </div>
-        <p class="text-gray-700 mb-4">${quiz.meta?.multipleChoiceCount || quiz.multipleChoice?.length || 0} MCQ, ${quiz.meta?.trueFalseCount || quiz.trueFalse?.length || 0} True/False</p>
-      </div>
-      <div class="flex justify-between items-center text-sm text-gray-500 mt-4">
-        <span class="text-green-700 font-semibold">Click to Start Quiz</span>
-      </div>
-    `;
-    // Make the entire card clickable and open in a new tab
-    card.addEventListener('click', () => {
-      window.open(`/activity/quiz_take.html?quiz=${encodeURIComponent(file)}`, '_blank');
-    });
-    card.style.cursor = 'pointer';
-    container.appendChild(card);
-  }
+/**
+ * POST /api/activity/submit
+ * Handles project submission from ws2checklist.html
+ * 
+ * Body expects:
+ * {
+ *   groupNumber: number,
+ *   members: string[],
+ *   projectUrl: string,
+ *   senderEmail: string,
+ *   checklistSummary: { sectionName: { taskName: boolean, ... }, ... }
+ * }
+ */
+router.post('/submit', async (req, res) => {
+    try {
+        const {
+            studentInfo, quizID, quiz, answers, times, score,
+            totalItems, correctItems, accuracy
+        } = req.body;
+        if (!studentInfo || !quizID || !quiz || !answers || !times || typeof score !== 'number') {
+            return res.status(400).json({ success: false, message: 'Missing required quiz fields.' });
+        }
+        const db = await getDb();
+        const quizResultsCollection = db.collection('tblQuizResults');
+        const resultDoc = {
+            studentInfo,
+            quizID,
+            quiz,
+            answers,
+            times,
+            score,
+            totalItems,
+            correctItems,
+            accuracy,
+            submittedAt: new Date()
+        };
+        await quizResultsCollection.insertOne(resultDoc);
+        res.json({ success: true, message: 'Quiz results saved.' });
+    } catch (error) {
+        console.error('Error saving quiz results:', error);
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+/**
+ * Helper function to calculate checklist statistics
+ */
+function calculateChecklistStats(checklistSummary) {
+    let coreTotal = 0;
+    let coreCompleted = 0;
+    let bonusTotal = 0;
+    let bonusCompleted = 0;
+
+    if (!checklistSummary || typeof checklistSummary !== 'object') {
+        return {
+            coreTotal: 0,
+            coreCompleted: 0,
+            bonusTotal: 0,
+            bonusCompleted: 0,
+            overallPercent: 0
+        };
+    }
+
+    // Iterate through all sections
+    for (const [sectionName, tasks] of Object.entries(checklistSummary)) {
+        if (typeof tasks === 'object' && tasks !== null) {
+            // Iterate through tasks in this section
+            for (const [taskName, isCompleted] of Object.entries(tasks)) {
+                // Determine if bonus or core based on naming convention
+                // You can adjust this logic based on your checklist structure
+                if (sectionName.toLowerCase().includes('bonus') || taskName.toLowerCase().includes('bonus')) {
+                    bonusTotal++;
+                    if (isCompleted) bonusCompleted++;
+                } else {
+                    coreTotal++;
+                    if (isCompleted) coreCompleted++;
+                }
+            }
+        }
+    }
+
+    const totalTasks = coreTotal + bonusTotal;
+    const totalCompleted = coreCompleted + bonusCompleted;
+    const overallPercent = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0;
+
+    return {
+        coreTotal,
+        coreCompleted,
+        bonusTotal,
+        bonusCompleted,
+        overallPercent
+    };
 }
 
-function startQuiz(filename) {
-  window.location.href = `/activity/quiz_take.html?quiz=${filename}`;
+/**
+ * Helper function to track email quota
+ */
+async function trackEmailQuota(emailQuotaCollection, provider) {
+    try {
+        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+        const dayKey = `email_quota_${today}`;
+
+        await emailQuotaCollection.updateOne(
+            { _id: dayKey },
+            {
+                $inc: {
+                    [provider.toLowerCase()]: 1,
+                    total: 1
+                },
+                $set: {
+                    date: today,
+                    lastUpdated: new Date()
+                }
+            },
+            { upsert: true }
+        );
+
+        console.log(`✅ Email quota tracked for ${provider}`);
+    } catch (err) {
+        console.error('⚠️ Error tracking email quota:', err);
+        // Don't throw - this is non-critical
+    }
 }
 
-document.addEventListener('DOMContentLoaded', renderQuizActivities);
+/**
+ * GET /api/activity/submissions
+ * Admin only - view all submissions
+ */
+router.get('/submissions', async (req, res) => {
+    try {
+        const db = await getDb();
+        const submissionsCollection = db.collection('tblSubmissions');
 
-function renderQuizQuestions(questions) {
-  const container = document.getElementById('quizQuestions');
-  container.innerHTML = '';
-  for (let i = 0; i < questions.length; i++) {
-    const question = questions[i];
-    const qDiv = document.createElement('div');
-    qDiv.className = 'quiz-question-card mb-6';
-    qDiv.innerHTML = `
-      <div class="question-header flex justify-between items-center mb-4">
-        <h4 class="font-semibold">Question ${i + 1}</h4>
-        <div class="question-meta text-sm text-gray-500">
-          <span>${question.points || 1} pts</span>
-        </div>
-      </div>
-      <div class="question-body">
-        <p class="text-gray-800">${question.text}</p>
-      </div>
-      <div class="question-options mt-4">
-        ${question.options.map((option, index) => `
-          <div class="flex items-center mb-2">
-            <input type="radio" id="q${i}o${index}" name="question${i}" value="${option.value}" class="mr-2">
-            <label for="q${i}o${index}" class="text-gray-700">${option.text}</label>
-          </div>
-        `).join('')}
-      </div>
-    `;
-    container.appendChild(qDiv);
-  }
-}
+        const submissions = await submissionsCollection
+            .find({})
+            .sort({ submittedAt: -1 })
+            .toArray();
+
+        return res.json({
+            success: true,
+            count: submissions.length,
+            submissions
+        });
+    } catch (error) {
+        console.error('Error fetching submissions:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch submissions.'
+        });
+    }
+});
+
+/**
+ * GET /api/activity/submissions/:submissionNumber
+ * View specific submission details
+ */
+router.get('/submissions/:submissionNumber', async (req, res) => {
+    try {
+        const { submissionNumber } = req.params;
+        const db = await getDb();
+        const submissionsCollection = db.collection('tblSubmissions');
+
+        const submission = await submissionsCollection.findOne({ submissionNumber });
+
+        if (!submission) {
+            return res.status(404).json({
+                success: false,
+                message: 'Submission not found.'
+            });
+        }
+
+        return res.json({
+            success: true,
+            submission
+        });
+    } catch (error) {
+        console.error('Error fetching submission:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Failed to fetch submission.'
+        });
+    }
+});
+
+/**
+ * POST /api/activity/quiz-submit
+ * Saves quiz results from quiz_take.js
+ * Expects:
+ * {
+ *   studentInfo: { ... },
+ *   quiz: { ... },
+ *   answers: [ ... ],
+ *   times: [ ... ],
+ *   score: Number
+ * }
+ */
+router.post('/quiz-submit', async (req, res) => {
+    console.log('[DEBUG] /quiz-submit called');
+    console.log('[DEBUG] Request body:', req.body);
+
+    try {
+        const { studentInfo, quiz, answers, times, score } = req.body;
+        if (!studentInfo || !quiz || !Array.isArray(answers) || !Array.isArray(times) || typeof score !== 'number') {
+            console.log('[DEBUG] Missing required quiz fields');
+            return res.status(400).json({ success: false, message: 'Missing required quiz fields.' });
+        }
+
+        const db = await getDb();
+        const quizResultsCollection = db.collection('tblQuizResults');
+
+        const resultDoc = {
+            studentInfo,
+            quiz,
+            answers,
+            times,
+            score,
+            submittedAt: new Date()
+        };
+
+        console.log('[DEBUG] Inserting quiz result:', resultDoc);
+        await quizResultsCollection.insertOne(resultDoc);
+
+        const leaderboardCollection = db.collection('tblQuizLeaderboard');
+        const totalTime = times.reduce((a, b) => a + b, 0);
+
+        console.log('[DEBUG] Upserting leaderboard for:', studentInfo.idNumber, quiz.title);
+        await leaderboardCollection.updateOne(
+            {
+                quizTitle: quiz.title,
+                idNumber: studentInfo.idNumber
+            },
+            {
+                $set: {
+                    firstName: studentInfo.firstName,
+                    lastName: studentInfo.lastName,
+                    email: studentInfo.email,
+                    score,
+                    timeTaken: totalTime,
+                    submittedAt: new Date()
+                }
+            },
+            { upsert: true }
+        );
+
+        console.log('[DEBUG] Quiz results and leaderboard updated.');
+        res.json({ success: true, message: 'Quiz results saved.' });
+    } catch (error) {
+        console.error('[ERROR] Error saving quiz results:', error);
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+/**
+ * GET /api/activity/quiz-leaderboard/:quizTitle
+ * View quiz leaderboard for a specific quiz
+ */
+router.get('/quiz-leaderboard/:quizTitle', async (req, res) => {
+    console.log('[DEBUG] /quiz-leaderboard called for quiz:', req.params.quizTitle);
+
+    try {
+        const db = await getDb();
+        const leaderboardCollection = db.collection('tblQuizLeaderboard');
+        const { quizTitle } = req.params;
+
+        // Decode URL parameter
+        const decodedQuizTitle = decodeURIComponent(quizTitle);
+        
+        const leaderboard = await leaderboardCollection
+            .find({ 
+                $or: [
+                    { quizID: decodedQuizTitle },
+                    { quizTitle: decodedQuizTitle }
+                ]
+            })
+            .sort({ score: -1, timeTaken: 1 })
+            .toArray();
+
+        console.log(`[DEBUG] Found ${leaderboard.length} leaderboard entries`);
+        res.json({ 
+            success: true, 
+            leaderboard: leaderboard.map(item => ({
+                firstName: item.firstName || '',
+                lastName: item.lastName || '',
+                idNumber: item.idNumber || '',
+                email: item.email || '',
+                score: item.score || 0,
+                timeTaken: item.timeTaken || 0,
+                totalItems: item.totalItems || 0,
+                correctItems: item.correctItems || 0,
+                accuracy: item.accuracy || 0,
+                submittedAt: item.submittedAt || new Date()
+            }))
+        });
+    } catch (error) {
+        console.error('[ERROR] Error fetching leaderboard:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error fetching leaderboard.' 
+        });
+    }
+});
+
+/**
+ * POST /api/activity/check-attempt
+ * Checks if a student has already attempted a quiz
+ * Expects: { idNumber: String, quizTitle: String }
+ */
+router.post('/check-attempt', async (req, res) => {
+    try {
+        const { idNumber, quizID } = req.body;
+        if (!idNumber || !quizID) {
+            return res.status(400).json({ success: false, message: 'Missing idNumber or quizID.' });
+        }
+        const db = await getDb();
+        const quizResultsCollection = db.collection('tblQuizResults');
+        const attempt = await quizResultsCollection.findOne({
+            'studentInfo.idNumber': idNumber,
+            quizID
+        });
+        res.json({ success: true, attempted: !!attempt });
+    } catch (error) {
+        console.error('[ERROR] Error checking attempt:', error);
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+/**
+ * POST /api/activity/update-leaderboard
+ * Updates or inserts a leaderboard entry for a quiz
+ */
+router.post('/update-leaderboard', async (req, res) => {
+    console.log('[DEBUG] Update leaderboard called:', req.body);
+    
+    try {
+        const {
+            studentInfo, quizID, quizTitle, score, timeTaken,
+            totalItems, correctItems, accuracy
+        } = req.body;
+        
+        if (!studentInfo || (!quizID && !quizTitle) || typeof score !== 'number') {
+            console.log('[DEBUG] Missing required fields:', req.body);
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Missing required fields.' 
+            });
+        }
+        
+        const db = await getDb();
+        const leaderboardCollection = db.collection('tblQuizLeaderboard');
+        
+        // Use quizTitle as fallback for quizID
+        const finalQuizID = quizID || quizTitle;
+        
+        const updateData = {
+            quizID: finalQuizID,
+            quizTitle: quizTitle || finalQuizID,
+            idNumber: studentInfo.idNumber,
+            firstName: studentInfo.firstName,
+            lastName: studentInfo.lastName,
+            email: studentInfo.email,
+            section: studentInfo.section,
+            score: score,
+            timeTaken: timeTaken || 0,
+            totalItems: totalItems || 0,
+            correctItems: correctItems || 0,
+            accuracy: accuracy || 0,
+            updatedAt: new Date()
+        };
+        
+        const result = await leaderboardCollection.updateOne(
+            {
+                quizID: finalQuizID,
+                idNumber: studentInfo.idNumber
+            },
+            {
+                $set: updateData,
+                $setOnInsert: { submittedAt: new Date() }
+            },
+            { upsert: true }
+        );
+        
+        console.log(`[DEBUG] Leaderboard update result:`, result);
+        
+        // Return updated leaderboard
+        const updatedLeaderboard = await leaderboardCollection
+            .find({ quizID: finalQuizID })
+            .sort({ score: -1, timeTaken: 1 })
+            .toArray();
+        
+        res.json({ 
+            success: true, 
+            message: 'Leaderboard updated.',
+            leaderboard: updatedLeaderboard
+        });
+        
+    } catch (error) {
+        console.error('[ERROR] Error updating leaderboard:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error updating leaderboard.' 
+        });
+    }
+});
+
+/**
+ * POST /api/activity/save-results
+ * Saves the results of a quiz attempt, including item-level details
+ * Expects:
+ * {
+ *   studentInfo: { ... },
+ *   quiz: { ... },
+ *   answers: [ ... ],
+ *   times: [ ... ],
+ *   score: Number,
+ *   totalItems: Number,
+ *   correctItems: Number,
+ *   accuracy: Number
+ * }
+ */
+router.post('/save-results', async (req, res) => {
+    console.log('[DEBUG] /save-results called');
+    console.log('[DEBUG] Request body:', req.body);
+
+    try {
+        const { studentInfo, quiz, answers, times, score, totalItems, correctItems, accuracy } = req.body;
+        if (!studentInfo || !quiz || !Array.isArray(answers) || !Array.isArray(times) || typeof score !== 'number') {
+            console.log('[DEBUG] Missing required fields for results saving');
+            return res.status(400).json({ success: false, message: 'Missing required fields.' });
+        }
+
+        const db = await getDb();
+        const resultsCollection = db.collection('tblResults');
+
+        const resultDoc = {
+            studentInfo,
+            quiz,
+            answers,
+            times,
+            score,
+            totalItems,
+            correctItems,
+            accuracy,
+            submittedAt: new Date()
+        };
+
+        console.log('[DEBUG] Inserting results document:', resultDoc);
+        await resultsCollection.insertOne(resultDoc);
+
+        res.json({ success: true, message: 'Results saved successfully.' });
+    } catch (error) {
+        console.error('[ERROR] Error saving results:', error);
+        res.status(500).json({ success: false, message: 'Server error.' });
+    }
+});
+
+module.exports = router;
