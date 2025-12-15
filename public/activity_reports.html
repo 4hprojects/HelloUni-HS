@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Activity Reports | HelloGrade Admin</title>
+    <title>Activity Reports | HelloUniversity Admin</title>
     <link rel="stylesheet" href="css/activity_reports.css">
 </head>
 <body>
@@ -37,6 +37,7 @@
                                 <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e5e7eb;">Submitted At</th>
                                 <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e5e7eb;">Status</th>
                                 <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e5e7eb;">Checklist Summary</th>
+                                <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #e5e7eb;">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="reportsTableBody">
@@ -47,6 +48,33 @@
             </div>
         </section>
     </main>
+
+    <!-- Details Modal -->
+    <div id="detailsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="detailsModalTitle">
+        <div class="modal-content">
+            <h3 id="detailsModalTitle">Checklist Details</h3>
+            <div id="detailsBody"></div>
+            <div class="modal-actions">
+                <button id="closeDetailsBtn" class="search-button">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+        <div class="modal-content">
+            <h3 id="deleteModalTitle">Confirm Deletion</h3>
+            <p>Type the following string to confirm:</p>
+            <pre id="deleteToken" style="background:#f3f4f6;padding:0.5rem;border-radius:4px;"></pre>
+            <input id="deleteInput" class="search-input" placeholder="Retype token">
+            <p id="deleteStatus" style="font-size:0.85rem;color:#6b7280;">Waiting for input…</p>
+            <div class="modal-actions">
+                <button id="cancelDeleteBtn" class="search-button">Cancel</button>
+                <button id="confirmDeleteBtn" class="search-button" disabled>Delete</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/activity_reports.js"></script>
 </body>
 </html>
