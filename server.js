@@ -61,11 +61,11 @@ const activityJsonApi = require('./routes/activityJsonApi'); // added 27 Nov 202
 const activitySubmit = require('./routes/activitySubmit'); // added 27 Nov 2025
 const javaLeaderboardApi = require('./routes/admin_dashboard/javaLeaderboardApi'); // added 27 Dec 2025
 const dsalgoFinalExamAPI = require('./routes/dsalgo1/dsalgofinalExamAPI');
-app.use('/api/activity/dsalgo1-finals', dsalgoFinalExamAPI);
 const arrayTraceRoutes = require('./routes/activity/arrayTraceRoutes'); //added 10 Dec 2025
+const arrayTraceReportsApi = require('./routes/admin_dashboard/arrayTraceReports'); //added 12 Dec 2025
 
-app.use('/api/array-trace', arrayTraceRoutes); //added 10 Dec 2025
 
+app.use('/api/activity/dsalgo1-finals', dsalgoFinalExamAPI);
 app.use('/api/activity', activitySubmit); // added 27 Nov 2025
 app.use('/api/activity', activityJsonApi); // added 27 Nov 2025
 app.use('/api/admin_dashboard', activityReportsApi);//added 23 Nov 2025
@@ -121,7 +121,8 @@ app.use((req, res, next) => {
   }
   next();
 });
-
+app.use('/api/admin-reports', arrayTraceReportsApi); //added 12 Dec 2025
+app.use('/api/array-trace', arrayTraceRoutes); //added 10 Dec 2025
 app.use('/api', emailApi);
 app.use('/api', userRegisterApi);
 app.use('/api/bulk-register', bulkRegisterApi);
@@ -1756,6 +1757,11 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
                 { projection: { firstName: 1, lastName: 1, studentIDNumber: 1, password: 1, role: 1, invalidLoginAttempts: 1, accountLockedUntil: 1, emaildb: 1, emailConfirmed: 1 } }
             );
 
+            // Add this check right after fetching user:
+            if (!user) {
+                return res.status(400).json({ success: false, message: 'Invalid student ID or password.' });
+            }
+
             // Block login if email not confirmed
             if (user && user.role === 'student' && user.emailConfirmed === false) {
                 return res.status(403).json({ success: false, message: 'Please verify your email before logging in.' });
@@ -1831,7 +1837,11 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
             req.session.userId = user._id.toString();
             req.session.studentIDNumber = user.studentIDNumber;
             req.session.role = user.role;
-            
+            if (user.role === 'admin') {
+                req.session.isAdmin = true;
+            } else {
+                req.session.isAdmin = false;
+            }
 
                 // Update last login time
                 await usersCollection.updateOne(
@@ -1886,7 +1896,7 @@ app.get('/api/quizzes/:quizId', isAuthenticated, async (req, res) => {
                 // Redirect to index.html after logout
                // return res.redirect('/index.html');
             });
-        } catch (error) {
+               } catch (error) {
             console.error('Error during logout:', error);
             return res.status(500).json({ success: false, message: 'Failed to update loginstatus.' });
         }
@@ -2133,12 +2143,12 @@ app.get('/user-details', isAuthenticated, async (req, res) => {
         // Fetch user details from the database
         const user = await usersCollection.findOne(
             { studentIDNumber: studentIDNumber }, 
-            { projection: { firstName: 1, lastName: 1, studentIDNumber: 1, role: 1 } }
+            { projection: { firstName: 1, lastName: 1, studentIDNumber: 1, password: 1, role: 1, invalidLoginAttempts: 1, accountLockedUntil: 1, emaildb: 1, emailConfirmed: 1 } }
         );
 
         if (!user) {
             console.error('User not found in tblUser:', studentIDNumber); // Debug log
-            return res.status(404).json({ success: false, message: 'Invalid student ID or password.' });
+            return res.status(400).json({ success: false, message: 'Invalid student ID or password.' });
         }     
         
 
@@ -2617,6 +2627,13 @@ app.get('/api/check-auth', (req, res) => {
   } else {
     res.sendStatus(401);
   }
+});
+
+app.get('/api/debug-session', (req, res) => {
+    res.json({
+        isAdmin: req.session && req.session.role === 'admin',
+        user: req.session && req.session.user
+    });
 });
 
   app.get('/blogs/:blogId', (req, res) => {
