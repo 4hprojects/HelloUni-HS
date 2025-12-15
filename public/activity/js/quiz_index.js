@@ -39,7 +39,7 @@ async function renderQuizActivities() {
     `;
     // Make the entire card clickable and open in a new tab
     card.addEventListener('click', () => {
-      window.open(`/activity/quiz_take.html?quiz=${encodeURIComponent(quiz.filename)}`, '_blank');
+      window.open(`/activity/quiz_take.html?quiz=${encodeURIComponent(file)}`, '_blank');
     });
     card.style.cursor = 'pointer';
     container.appendChild(card);
