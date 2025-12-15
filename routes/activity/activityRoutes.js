@@ -270,27 +270,52 @@ router.post('/quiz-submit', async (req, res) => {
 });
 
 /**
- * GET /api/activity/quiz-leaderboard/:quizID
+ * GET /api/activity/quiz-leaderboard/:quizTitle
  * View quiz leaderboard for a specific quiz
  */
-router.get('/quiz-leaderboard/:quizID', async (req, res) => {
-    console.log('[DEBUG] /quiz-leaderboard called for:', req.params.quizID);
+router.get('/quiz-leaderboard/:quizTitle', async (req, res) => {
+    console.log('[DEBUG] /quiz-leaderboard called for quiz:', req.params.quizTitle);
 
     try {
         const db = await getDb();
         const leaderboardCollection = db.collection('tblQuizLeaderboard');
-        const { quizID } = req.params;
+        const { quizTitle } = req.params;
 
+        // Decode URL parameter
+        const decodedQuizTitle = decodeURIComponent(quizTitle);
+        
         const leaderboard = await leaderboardCollection
-            .find({ quizID })
+            .find({ 
+                $or: [
+                    { quizID: decodedQuizTitle },
+                    { quizTitle: decodedQuizTitle }
+                ]
+            })
             .sort({ score: -1, timeTaken: 1 })
             .toArray();
 
-        console.log('[DEBUG] Leaderboard data:', leaderboard);
-        res.json({ success: true, leaderboard });
+        console.log(`[DEBUG] Found ${leaderboard.length} leaderboard entries`);
+        res.json({ 
+            success: true, 
+            leaderboard: leaderboard.map(item => ({
+                firstName: item.firstName || '',
+                lastName: item.lastName || '',
+                idNumber: item.idNumber || '',
+                email: item.email || '',
+                score: item.score || 0,
+                timeTaken: item.timeTaken || 0,
+                totalItems: item.totalItems || 0,
+                correctItems: item.correctItems || 0,
+                accuracy: item.accuracy || 0,
+                submittedAt: item.submittedAt || new Date()
+            }))
+        });
     } catch (error) {
         console.error('[ERROR] Error fetching leaderboard:', error);
-        res.status(500).json({ success: false, message: 'Server error.' });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error fetching leaderboard.' 
+        });
     }
 });
 
@@ -321,49 +346,78 @@ router.post('/check-attempt', async (req, res) => {
 /**
  * POST /api/activity/update-leaderboard
  * Updates or inserts a leaderboard entry for a quiz
- * Expects:
- * {
- *   studentInfo: { ... },
- *   quizTitle: String,
- *   score: Number,
- *   timeTaken: Number
- * }
  */
 router.post('/update-leaderboard', async (req, res) => {
+    console.log('[DEBUG] Update leaderboard called:', req.body);
+    
     try {
         const {
-            studentInfo, quizID, score, timeTaken,
+            studentInfo, quizID, quizTitle, score, timeTaken,
             totalItems, correctItems, accuracy
         } = req.body;
-        if (!studentInfo || !quizID || typeof score !== 'number') {
-            return res.status(400).json({ success: false, message: 'Missing required fields.' });
+        
+        if (!studentInfo || (!quizID && !quizTitle) || typeof score !== 'number') {
+            console.log('[DEBUG] Missing required fields:', req.body);
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Missing required fields.' 
+            });
         }
+        
         const db = await getDb();
         const leaderboardCollection = db.collection('tblQuizLeaderboard');
-        await leaderboardCollection.updateOne(
+        
+        // Use quizTitle as fallback for quizID
+        const finalQuizID = quizID || quizTitle;
+        
+        const updateData = {
+            quizID: finalQuizID,
+            quizTitle: quizTitle || finalQuizID,
+            idNumber: studentInfo.idNumber,
+            firstName: studentInfo.firstName,
+            lastName: studentInfo.lastName,
+            email: studentInfo.email,
+            section: studentInfo.section,
+            score: score,
+            timeTaken: timeTaken || 0,
+            totalItems: totalItems || 0,
+            correctItems: correctItems || 0,
+            accuracy: accuracy || 0,
+            updatedAt: new Date()
+        };
+        
+        const result = await leaderboardCollection.updateOne(
             {
-                quizID,
+                quizID: finalQuizID,
                 idNumber: studentInfo.idNumber
             },
             {
-                $set: {
-                    firstName: studentInfo.firstName,
-                    lastName: studentInfo.lastName,
-                    email: studentInfo.email,
-                    score,
-                    timeTaken,
-                    totalItems,
-                    correctItems,
-                    accuracy,
-                    submittedAt: new Date()
-                }
+                $set: updateData,
+                $setOnInsert: { submittedAt: new Date() }
             },
             { upsert: true }
         );
-        res.json({ success: true });
+        
+        console.log(`[DEBUG] Leaderboard update result:`, result);
+        
+        // Return updated leaderboard
+        const updatedLeaderboard = await leaderboardCollection
+            .find({ quizID: finalQuizID })
+            .sort({ score: -1, timeTaken: 1 })
+            .toArray();
+        
+        res.json({ 
+            success: true, 
+            message: 'Leaderboard updated.',
+            leaderboard: updatedLeaderboard
+        });
+        
     } catch (error) {
-        console.error('Error updating leaderboard:', error);
-        res.status(500).json({ success: false, message: 'Server error.' });
+        console.error('[ERROR] Error updating leaderboard:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error updating leaderboard.' 
+        });
     }
 });
 
