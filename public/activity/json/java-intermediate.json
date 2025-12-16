@@ -26,7 +26,7 @@
         "c": "18",
         "d": "10"
       },
-      "answer": "c"
+      "answer": "b"
     },
     {
       "id": 3,
@@ -110,7 +110,7 @@
       "question": "Which of the following is NOT a Java loop?",
       "choices": {
         "a": "for",
-        "b": "foreach",
+        "b": "for-each (enhanced for)",
         "c": "while",
         "d": "repeat"
       },
@@ -142,7 +142,7 @@
       "id": 13,
       "question": "Which line creates a String correctly?",
       "choices": {
-        "a": "String name = “John”;",
+        "a": "String name = "John";",
         "b": "String name = 'John';",
         "c": "String name = String(\"John\");",
         "d": "string name = \"John\";"
@@ -326,7 +326,7 @@
     {
       "id": 9,
       "question": "The modulo operator (%) works with both ints and doubles.",
-      "answer": false
+      "answer": true
     },
     {
       "id": 10,
@@ -335,3 +335,4 @@
     }
   ]
 }
+
