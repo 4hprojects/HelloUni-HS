@@ -12,10 +12,10 @@
       "id": 1,
       "question": "Which keyword is used to declare a variable in Java?",
       "choices": {
-        "a": "var",
-        "b": "int",
-        "c": "let",
-        "d": "data"
+        "a": "x = 5",
+        "b": "int x",
+        "c": "let x",
+        "d": "data x"
       },
       "answer": "b"
     },
@@ -332,8 +332,9 @@
     },
     {
       "id": 10,
-      "question": "Java allows multiple main methods in one file.",
+      "question": "Java allows multiple main methods in one class.",
       "answer": false
     }
   ]
 }
+
