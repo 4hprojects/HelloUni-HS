@@ -145,8 +145,8 @@
     {
       "id": 20,
       "question": "What is printed?\nint[] arr = {2, 4, 6, 8};\nint sum = 0;\nfor (int i = 0; i < arr.length; i++) {\n    if (i % 2 == 0) {\n        sum += arr[i];\n    }\n}\nSystem.out.println(sum);",
-      "options": ["10", "12", "14", "20"],
-      "answer": "10"
+      "options": ["8", "12", "14", "20"],
+      "answer": "8"
     },
     {
       "id": 21,
@@ -242,3 +242,4 @@
     }
   ]
 }
+
